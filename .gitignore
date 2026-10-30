@@ -9,3 +9,7 @@ GenAI_M14_Capstone_Scenario.pdf
 
 # Regenerable by scripts/run_ingestion.py
 data/processed/
+
+# Node tooling (Promptfoo)
+node_modules/
+eval/results/logs/

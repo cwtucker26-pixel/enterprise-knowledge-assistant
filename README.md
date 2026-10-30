@@ -34,3 +34,22 @@ Startup loads the embedding model, the re-ranker and the guard models once (abou
 between workers: run a single worker (the default). A `session_id` acts as a bearer token; there is no
 authentication (out of scope). A `/chat` call takes roughly 7 to 25 seconds because it runs retrieval, the
 agent and the model-based guards.
+
+## Evaluate
+
+All evaluations call the real API over HTTP: each script starts uvicorn on port 8765, runs, and stops it
+(`scripts/eval_server.py`). Results are written to `eval/results/` with the run date.
+
+```bash
+npm install                                  # once: installs Promptfoo (Node)
+python scripts/run_promptfoo.py              # regression suite: 75 cases, compares with the saved baseline
+python scripts/run_safety.py                 # adversarial prompts -> eval/safety/safety_scorecard.md
+python eval/ragas/run_ragas.py               # RAGAS faithfulness / relevancy / context precision / recall
+```
+
+**Regression test (one command):** `python scripts/run_promptfoo.py` runs every case in
+`eval/promptfoo/` and exits non-zero if a case that passed in `eval/promptfoo/baseline.json` now fails. After an
+intended change, accept the new results with `python scripts/run_promptfoo.py --update-baseline`; use
+`--filter 'SH-|MH-'` to run a subset. Answers vary between runs, so the cases assert facts, fields and
+behaviour (blocked, tools used, citations present, no raw PII), never exact wording. The suite needs the
+Anthropic key in `.env` (one `llm-rubric` grader uses Haiku).

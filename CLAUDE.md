@@ -101,7 +101,7 @@ Legend: [R] required by task list, [G] grey area (in project header, implied by 
 - [ ] [G] Model routing (Haiku vs Sonnet)
 
 ### Evaluate
-- [ ] [R] Task 9 — Promptfoo suite, 30+ cases, regression run, failure analysis
+- [x] [R] Task 9 — Promptfoo suite, 30+ cases, regression run, failure analysis
 - [ ] [R] Task 10 — RAGAS: faithfulness, answer relevance, context precision, context recall
 - [ ] [R] Task 11 — Safety eval: adversarial prompts, failure rate, safety scorecard
 - [ ] [R] Task 12 — Performance: latency, caching test, throughput

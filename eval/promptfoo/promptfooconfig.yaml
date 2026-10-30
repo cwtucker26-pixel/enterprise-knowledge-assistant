@@ -1,0 +1,19 @@
+# ACME knowledge assistant: regression suite. Calls the real API (POST /chat).
+# Run it with:  python scripts/run_promptfoo.py   (starts the API, runs this config, stops the API)
+description: ACME knowledge assistant regression suite
+
+prompts:
+  - "{{question}}"
+
+providers:
+  - id: file://chat_provider.js
+    label: acme-chat-api
+
+defaultTest:
+  options:
+    # Promptfoo's llm-rubric grader defaults to OpenAI; use an Anthropic model instead.
+    provider: anthropic:messages:claude-haiku-5-5
+
+tests:
+  - file://cases.js
+  - file://adversarial_tests.js
