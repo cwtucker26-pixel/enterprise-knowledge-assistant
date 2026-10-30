@@ -8,8 +8,6 @@ from src.retrieval import graph
 from src.retrieval.rerank import Reranker, select_top
 from src.retrieval.vector import get_embeddings, get_vector_store
 
-TYPE_RANK = {"DEPENDS_ON": 0, "OWNS": 2, "MANAGES": 2, "RESOLVED_BY": 2, "RELATED_TO": 3}
-
 
 def build_patterns(entities: list[dict]) -> list[tuple[dict, re.Pattern]]:
     """Case-insensitive; hyphens, spaces and underscores are interchangeable ("payment service" matches
@@ -76,18 +74,55 @@ def format_fact(f: dict) -> str:
     return f"{f['a']} {rel} {f['b']} (source: {sources}{note})"
 
 
-def build_graph_facts(edges: list[dict], linked_keys: set, hops: dict[str, int], limit: int) -> list[str]:
-    """Edges touching a linked entity first, then edges touching a 1-hop neighbour; DEPENDS_ON before the rest."""
+PERSON_RELATIONS = {"system_owner", "procedure_owner"}
+
+
+def fact_tier(f: dict, linked_keys: set, path_keys: set, conflicts: set) -> int:
+    """Lower tier = earlier in the facts list. Ownership facts about entities on a dependency/resolution
+    path (and the linked entities) come right after the authoritative dependencies; emits_to comes last."""
+    subject = linked_keys | path_keys
+    if f["type"] == "DEPENDS_ON":
+        touches_linked = f["a_key"] in linked_keys or f["b_key"] in linked_keys
+        if f["authoritative"]:
+            return 0 if touches_linked else 5
+        return 2 if (f["a_key"], f["b_key"]) in conflicts and touches_linked else 5
+    if f["type"] == "RELATED_TO" and f["relation"] in PERSON_RELATIONS and f["b_key"] in subject:
+        return 1
+    if f["type"] == "OWNS" and f["b_key"] in subject:
+        return 3
+    if f["type"] == "MANAGES" and f["b_key"] in f["owner_teams"]:
+        return 4
+    if f["type"] == "RELATED_TO" and f["relation"] == "emits_to":
+        return 7
+    return 6
+
+
+def build_graph_facts(edges: list[dict], linked_keys: set, expanded: dict, subjects: dict, limit: int) -> list[str]:
+    path_keys = {k for k, v in expanded.items() if k not in linked_keys and v["via"] & PRIORITY_VIA}
     merged: dict[tuple, dict] = {}
     for e in edges:
         key = (e["a_key"], e["type"], e["relation"], e["b_key"], bool(e["authoritative"]))
         fact = merged.setdefault(key, {**e, "authoritative": bool(e["authoritative"]), "sources": set()})
         fact["sources"].add(e["source"])
+    facts = list(merged.values())
+    # A non-authoritative edge whose reverse is authoritative is a conflict worth showing.
+    conflicts = {(f["a_key"], f["b_key"]) for f in facts if f["type"] == "DEPENDS_ON" and not f["authoritative"]
+                 and any(g["type"] == "DEPENDS_ON" and g["authoritative"] and (g["a_key"], g["b_key"]) == (f["b_key"], f["a_key"])
+                         for g in facts)}
+    subject = linked_keys | path_keys
+    owner_teams = {f["a_key"] for f in facts if f["type"] == "OWNS" and f["b_key"] in subject}
+    for f in facts:
+        f["owner_teams"] = owner_teams
+
     def sort_key(f):
-        touches_linked = f["a_key"] in linked_keys or f["b_key"] in linked_keys
-        auth_first = 0 if f["authoritative"] else 1
-        return (0 if touches_linked else 1, TYPE_RANK[f["type"]], auth_first, f["a"], f["b"])
-    return [format_fact(f) for f in sorted(merged.values(), key=sort_key)[:limit]]
+        tier = fact_tier(f, linked_keys, path_keys, conflicts)
+        # Inside the ownership tiers: path entities before the linked entity's own owner, entities
+        # with a document of their own first, then nearest, then by name.
+        target = f["b_key"]
+        entity_rank = (target in linked_keys, target not in subjects, expanded.get(target, {"hops": 9})["hops"], f["b"])
+        return (tier, entity_rank if tier in (1, 3) else (), 0 if f["authoritative"] else 1, f["a"], f["b"])
+
+    return [format_fact(f) for f in sorted(facts, key=sort_key)[:limit]]
 
 
 class HybridRetriever:
@@ -120,16 +155,20 @@ class HybridRetriever:
                 linked_keys = {e["key"] for e in linked}
                 expanded = graph.expand_entities(self.driver, sorted(linked_keys))
                 hops = {k: v["hops"] for k, v in expanded.items()}
+                subjects = graph.subject_docs(self.driver, list(expanded))
                 graph_doc_ids = select_graph_docs(
                     expanded,
-                    graph.subject_docs(self.driver, list(expanded)),
+                    subjects,
                     graph.documents_mentioning(self.driver, list(expanded)),
                     linked_keys,
                     MAX_GRAPH_DOCS,
                 )
                 graph_chunks = self._chunks_for_docs(graph_doc_ids)
-                near = [k for k, h in hops.items() if h <= 1]
-                facts = build_graph_facts(graph.edges_touching(self.driver, near), linked_keys, hops, MAX_GRAPH_FACTS)
+                path = [k for k, v in expanded.items() if v["via"] & PRIORITY_VIA]
+                near = sorted({k for k, h in hops.items() if h <= 1} | set(path))
+                facts = build_graph_facts(
+                    graph.edges_touching(self.driver, near), linked_keys, expanded, subjects, MAX_GRAPH_FACTS
+                )
 
         pool: dict[str, Document] = {}
         for doc in vector_chunks + graph_chunks:
