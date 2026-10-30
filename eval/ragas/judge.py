@@ -41,6 +41,6 @@ class AnthropicJudge(ChatAnthropic):
 def make_judge(model: str | None = None):
     """Returns (ragas_llm, ragas_embeddings). Default judge: the reasoning model (Sonnet)."""
     s = load_settings()
-    llm = AnthropicJudge(model=model or s.reasoning_model, api_key=s.anthropic_api_key, max_tokens=4096)
+    llm = AnthropicJudge(model=model or s.reasoning_model, api_key=s.anthropic_api_key, max_tokens=12000)  # long answers (R08) overflowed 4096 while the judge was reasoning
     embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL, encode_kwargs={"normalize_embeddings": True})
     return LangchainLLMWrapper(llm), LangchainEmbeddingsWrapper(embeddings)

@@ -2,6 +2,7 @@
 
     python scripts/run_promptfoo.py                  # run everything, compare with the saved baseline
     python scripts/run_promptfoo.py --filter 'SH-'   # only cases whose description matches
+    python scripts/run_promptfoo.py --tag run2       # keep this run's results in promptfoo_<date>_run2.json
     python scripts/run_promptfoo.py --update-baseline  # accept this run as the new baseline
 
 A "regression" is a case that passed in eval/promptfoo/baseline.json and fails now; the exit code is 1 if any.
@@ -46,9 +47,11 @@ def main() -> int:
     ap.add_argument("--filter", default=None, help="regex on the case description")
     ap.add_argument("--concurrency", type=int, default=3)
     ap.add_argument("--update-baseline", action="store_true")
+    ap.add_argument("--tag", default=None, help="name the results file promptfoo_<date>_<tag>.json instead of overwriting the dated one")
     args = ap.parse_args()
 
-    out_path = ROOT / "eval" / "results" / f"promptfoo_{datetime.date.today().isoformat()}.json"
+    suffix = f"_{args.tag}" if args.tag else ""
+    out_path = ROOT / "eval" / "results" / f"promptfoo_{datetime.date.today().isoformat()}{suffix}.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with serve() as base_url:
         code = run_promptfoo(base_url, out_path, args.filter, args.concurrency)

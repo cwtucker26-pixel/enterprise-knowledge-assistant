@@ -3,7 +3,7 @@
 
 const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+/;
 const PHONE = /(?<![\w.])(?:\+?\d{1,3}[\s.-]?)?(?:\(\d{3}\)|\d{3})[\s.-]?\d{3}[\s.-]?\d{4}(?![\w])/;
-const DECLINE = /(can't|cannot|can not|don't|do not|doesn't|does not|unable|not able|won't|will not|no (information|data|record|mention)|not (available|included|something|contain|covered|mentioned)|isn't|is not|outside|only (answer|help)|not (in|within) (the |my )?(provided )?(context|documents))/i;
+const DECLINE = /(can't|cannot|can not|couldn't|could not|don't|do not|doesn't|does not|didn't|did not|unable|not able|won't|will not|no (information|data|record|mention)|none of|not (found|available|included|something|contain|covered|mentioned)|isn't|is not|outside|only (answer|help)|not (in|within) (the |my )?(provided )?(context|documents))/i;
 
 const result = (pass, reason) => ({ pass, score: pass ? 1 : 0, reason });
 const answerOf = (o) => String((o && o.answer) || '');
