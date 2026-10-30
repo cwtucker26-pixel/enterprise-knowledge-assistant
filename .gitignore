@@ -6,3 +6,6 @@ chroma_db/
 __pycache__/
 .DS_Store
 GenAI_M14_Capstone_Scenario.pdf
+
+# Regenerable by scripts/run_ingestion.py
+data/processed/

@@ -39,7 +39,7 @@ system, team, person, and SOP.
   POL-004 Remote Work (`pdfs/`)
 - **Markdown (17):** incident reports INC-201..205, SOP-01..05/17/22, and technical manuals for
   Payment-Service, Auth-DB, UserProfile-API, DataWarehouse, APIGateway (`markdown/`)
-- **FAQ:** `faq/FAQ.md` (12 Q&A pairs)
+- **FAQ:** `faq/FAQ.md` (11 Q&A pairs)
 - **Structured (`structured/`):** `users.csv` (46 people), `products.csv` (7), `transactions.csv`
   (200 rows, all via Payment-Service) -> loaded into SQLite for the SQL tool
 - **Metadata map:** `doc_metadata.csv` (filename, doc_type, dept, date, author, system_refs,
@@ -88,7 +88,7 @@ Legend: [R] required by task list, [G] grey area (in project header, implied by 
 
 ### Build
 - [x] [R] Task 0 — Project setup (venv, deps, .env, folders, git)
-- [ ] [R] Task 1 — Ingestion: load PDFs/MD/FAQ/CSV, clean, extract metadata, store processed
+- [x] [R] Task 1 — Ingestion: load PDFs/MD/FAQ/CSV, clean, extract metadata, store processed
 - [ ] [R] Task 2 — Vector index: chunk, embed, store in ChromaDB, validate retrieval
 - [ ] [R] Task 3 — Knowledge graph: extract entities/relations, load Neo4j, validate queries
 - [ ] [R] Task 4 — Hybrid retrieval: vector + graph, merge, re-rank

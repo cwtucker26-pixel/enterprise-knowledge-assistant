@@ -8,6 +8,12 @@ from dotenv import load_dotenv
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(PROJECT_ROOT / ".env")
 
+# Data locations (plain paths, no secrets, so scripts that need no API keys can import them)
+RAW_DIR = PROJECT_ROOT / "data" / "raw"
+PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
+DOCUMENTS_PATH = PROCESSED_DIR / "documents.jsonl"
+SQLITE_PATH = PROCESSED_DIR / "acme.db"
+
 REQUIRED_KEYS = [
     "ANTHROPIC_API_KEY",
     "NEO4J_URI",
