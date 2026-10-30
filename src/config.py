@@ -14,6 +14,16 @@ PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 DOCUMENTS_PATH = PROCESSED_DIR / "documents.jsonl"
 SQLITE_PATH = PROCESSED_DIR / "acme.db"
 
+# Vector index (Task 2)
+CHROMA_DIR = PROJECT_ROOT / "chroma_db"
+COLLECTION_NAME = "acme_docs"
+EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
+BGE_QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
+CHUNK_MIN_CHARS = 200  # sections shorter than this are merged into a neighbour
+CHUNK_MAX_CHARS = 1000  # hard cap; longer sections are split on line boundaries
+CHUNK_OVERLAP_CHARS = 100  # only used when a section is force-split
+TOP_K = 5
+
 REQUIRED_KEYS = [
     "ANTHROPIC_API_KEY",
     "NEO4J_URI",

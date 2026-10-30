@@ -21,7 +21,7 @@ DataWarehouse (Data Engineering, Chen Wei), APIGateway (Security, Natalia Voss).
 Note: FAQ.md lists only the first three (omits DataWarehouse); the manuals include all four.
 INC-205's "Auth-DB depends on APIGateway" is a distractor.
 
-**Sources:** the four dependent manuals, manual_auth_db, FAQ.md, users.csv (leads)
+**Sources:** manual_payment_service, manual_userprofile_api, manual_datawarehouse, manual_apigateway, manual_auth_db, FAQ.md, users.csv
 
 ## Q3 — Auth-DB incidents, SOPs, SOP owners
 **Question:** Which past incidents involved Auth-DB, which SOP resolved each, and who owns those SOPs?

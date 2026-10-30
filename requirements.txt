@@ -5,6 +5,8 @@ pandas
 # Embeddings and vector store
 sentence-transformers
 chromadb
+langchain-huggingface
+langchain-chroma
 
 # LLM
 langchain

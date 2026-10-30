@@ -1,0 +1,68 @@
+Vector-only retrieval baseline (top 5 per question; dist = cosine distance, lower is closer)
+
+Q1: Payment-Service is returning 503s. Which upstream system is the likely cause, and who do I page?
+  manual_payment_service   manual_payment_service#1   0.288  [manual_payment_service | technical_manual | Payment-Service | Architecture] ## 
+  FAQ-10                   FAQ-10#0                   0.290  [FAQ-10 | faq | Systems] Q: What caused the March 2026 Payment-Service outage? A
+  SOP-17                   SOP-17#2                   0.293  [SOP-17 | sop | Procedure] ## Procedure  1. Confirm Payment-Service is returning
+  INC-204                  INC-204#2                  0.297  [INC-204 | incident_report | Payment-Service, Auth-DB | Impact] ## Impact  - Pay
+  INC-204                  INC-204#0                  0.304  [INC-204 | incident_report | Payment-Service, Auth-DB | Overview] # Incident Rep
+  -> MISSING: 2/4 expected sources in top 5
+     missing: manual_auth_db, SOP-05
+
+Q2: Which systems depend on Auth-DB, and who owns each?
+  FAQ-03                   FAQ-03#0                   0.136  [FAQ-03 | faq | General] Q: Which systems depend on Auth-DB? A: Auth-DB is a fou
+  manual_auth_db           manual_auth_db#0           0.199  [manual_auth_db | technical_manual | Auth-DB | Overview] # Technical Manual — Au
+  manual_auth_db           manual_auth_db#1           0.275  [manual_auth_db | technical_manual | Auth-DB | Architecture] ## Architecture  ``
+  POL-003                  POL-003#1                  0.301  [POL-003 | policy | Access Control] 2. Access Control All system access is provi
+  INC-204                  INC-204#3                  0.309  [INC-204 | incident_report | Payment-Service, Auth-DB | Root Cause Analysis] ## 
+  -> MISSING: 2/6 expected sources in top 5
+     missing: manual_payment_service, manual_userprofile_api, manual_datawarehouse, manual_apigateway
+     not in vector index (excluded): users.csv
+
+Q3: Which past incidents involved Auth-DB, which SOP resolved each, and who owns those SOPs?
+  INC-201                  INC-201#4                  0.217  [INC-201 | incident_report | Auth-DB, UserProfile-API | Resolution] ## Resolutio
+  INC-204                  INC-204#4                  0.228  [INC-204 | incident_report | Payment-Service, Auth-DB | Resolution] ## Resolutio
+  INC-201                  INC-201#0                  0.228  [INC-201 | incident_report | Auth-DB, UserProfile-API | Overview] # Incident Rep
+  INC-205                  INC-205#4                  0.233  [INC-205 | incident_report | APIGateway, Auth-DB | Resolution] ## Resolution  In
+  INC-204                  INC-204#0                  0.261  [INC-204 | incident_report | Payment-Service, Auth-DB | Overview] # Incident Rep
+  -> MISSING: 3/6 expected sources in top 5
+     missing: SOP-01, SOP-17, SOP-22
+     not in vector index (excluded): doc_metadata.csv
+
+Q4: We suspect customer PII was exfiltrated from UserProfile-API. What do we do, who is told and by when, and can we delete the logs?
+  FAQ-08                   FAQ-08#0                   0.252  [FAQ-08 | faq | Data & Compliance] Q: Where is customer PII stored? A: Customer 
+  INC-201                  INC-201#3                  0.260  [INC-201 | incident_report | Auth-DB, UserProfile-API | Root Cause Analysis] ## 
+  INC-201                  INC-201#1                  0.263  [INC-201 | incident_report | Auth-DB, UserProfile-API | Summary] ## Summary  On 
+  manual_userprofile_api   manual_userprofile_api#1   0.279  [manual_userprofile_api | technical_manual | UserProfile-API | Architecture] ## 
+  manual_userprofile_api   manual_userprofile_api#0   0.295  [manual_userprofile_api | technical_manual | UserProfile-API | Overview] # Techn
+  -> MISSING: 0/4 expected sources in top 5
+     missing: POL-001, POL-002, POL-003, SOP-22
+
+Q5: I work remotely and need access to Auth-DB. What are the requirements?
+  POL-004                  POL-004#1                  0.224  [POL-004 | policy | Security Requirements] 2. Security Requirements Remote worke
+  manual_auth_db           manual_auth_db#0           0.246  [manual_auth_db | technical_manual | Auth-DB | Overview] # Technical Manual — Au
+  manual_auth_db           manual_auth_db#2           0.262  [manual_auth_db | technical_manual | Auth-DB | Configuration] ## Configuration  
+  manual_auth_db           manual_auth_db#1           0.278  [manual_auth_db | technical_manual | Auth-DB | Architecture] ## Architecture  ``
+  POL-003                  POL-003#1                  0.299  [POL-003 | policy | Access Control] 2. Access Control All system access is provi
+  -> MISSING: 2/3 expected sources in top 5
+     missing: SOP-03
+
+Q6: Does Auth-DB depend on Payment-Service?
+  FAQ-03                   FAQ-03#0                   0.142  [FAQ-03 | faq | General] Q: Which systems depend on Auth-DB? A: Auth-DB is a fou
+  manual_payment_service   manual_payment_service#1   0.171  [manual_payment_service | technical_manual | Payment-Service | Architecture] ## 
+  manual_auth_db           manual_auth_db#1           0.200  [manual_auth_db | technical_manual | Auth-DB | Architecture] ## Architecture  ``
+  INC-204                  INC-204#3                  0.230  [INC-204 | incident_report | Payment-Service, Auth-DB | Root Cause Analysis] ## 
+  INC-204                  INC-204#1                  0.252  [INC-204 | incident_report | Payment-Service, Auth-DB | Summary] ## Summary  On 
+  -> ALL FOUND: 3/3 expected sources in top 5
+
+Summary
+  Q1: 2/4  <-- incomplete
+  Q2: 2/6  <-- incomplete
+  Q3: 3/6  <-- incomplete
+  Q4: 0/4  <-- incomplete
+  Q5: 2/3  <-- incomplete
+  Q6: 3/3
+  questions fully covered: 1/6
+  sources found overall:   12/26
+
+Integrity: PASS

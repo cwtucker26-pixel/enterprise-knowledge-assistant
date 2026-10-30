@@ -89,7 +89,7 @@ Legend: [R] required by task list, [G] grey area (in project header, implied by 
 ### Build
 - [x] [R] Task 0 — Project setup (venv, deps, .env, folders, git)
 - [x] [R] Task 1 — Ingestion: load PDFs/MD/FAQ/CSV, clean, extract metadata, store processed
-- [ ] [R] Task 2 — Vector index: chunk, embed, store in ChromaDB, validate retrieval
+- [x] [R] Task 2 — Vector index: chunk, embed, store in ChromaDB, validate retrieval
 - [ ] [R] Task 3 — Knowledge graph: extract entities/relations, load Neo4j, validate queries
 - [ ] [R] Task 4 — Hybrid retrieval: vector + graph, merge, re-rank
 - [ ] [R] Task 5 — LangGraph agent: web search, query tool, Python execution, multi-step reasoning
