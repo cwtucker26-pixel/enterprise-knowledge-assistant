@@ -1,0 +1,19 @@
+# Ingestion
+pypdf
+pandas
+
+# Embeddings and vector store
+sentence-transformers
+chromadb
+
+# LLM
+langchain
+langchain-anthropic
+
+# Config
+python-dotenv
+
+# Service clients (used by scripts/check_setup.py)
+neo4j
+tavily-python
+langfuse

@@ -1,0 +1,8 @@
+.env
+.venv/
+
+# Added in Task 0
+chroma_db/
+__pycache__/
+.DS_Store
+GenAI_M14_Capstone_Scenario.pdf
