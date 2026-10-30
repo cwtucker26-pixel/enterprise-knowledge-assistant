@@ -103,7 +103,7 @@ Legend: [R] required by task list, [G] grey area (in project header, implied by 
 ### Evaluate
 - [x] [R] Task 9 — Promptfoo suite, 30+ cases, regression run, failure analysis
 - [ ] [R] Task 10 — RAGAS: faithfulness, answer relevance, context precision, context recall
-- [ ] [R] Task 11 — Safety eval: adversarial prompts, failure rate, safety scorecard
+- [x] [R] Task 11 — Safety eval: adversarial prompts, failure rate, safety scorecard
 - [ ] [R] Task 12 — Performance: latency, caching test, throughput
 
 ### Deliver
