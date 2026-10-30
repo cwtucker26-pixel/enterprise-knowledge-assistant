@@ -24,3 +24,6 @@ langfuse
 # API
 fastapi
 uvicorn
+
+# Evaluation
+ragas
