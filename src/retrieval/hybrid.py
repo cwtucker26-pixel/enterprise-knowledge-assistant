@@ -28,18 +28,43 @@ def link_entities(question: str, patterns) -> list[dict]:
     return [ent for ent, pat in patterns if pat.search(question)]
 
 
-def rank_graph_docs(rows: list[dict], hops: dict[str, int], limit: int) -> list[str]:
-    """Closest document first (hop of its nearest mentioned entity); ties go to more mentions of it."""
+PRIORITY_VIA = {"DEPENDS_ON", "RESOLVED_BY"}  # entities reached through these edges are on a dependency/resolution path
+
+
+def select_graph_docs(expanded: dict, subjects: dict, mention_rows: list[dict], linked_keys: set, limit: int) -> list[str]:
+    """Pick up to `limit` documents, in three passes:
+    1. the document about each linked entity (its manual, SOP, ...);
+    2. documents about entities reached via DEPENDS_ON / RESOLVED_BY, nearest first, whatever the hop
+       (so a SOP two hops away is not crowded out by the many documents that merely mention a hub);
+    3. documents that mention expanded entities: nearest entity first, ties to more mentions.
+    """
+    chosen: list[str] = []
+
+    def add(doc_id):
+        if doc_id not in chosen and len(chosen) < limit:
+            chosen.append(doc_id)
+
+    for key in sorted(linked_keys):
+        if key in subjects:
+            add(subjects[key])
+    priority = sorted(
+        (k for k, v in expanded.items() if k not in linked_keys and v["via"] & PRIORITY_VIA and k in subjects),
+        key=lambda k: (expanded[k]["hops"], k),
+    )
+    for key in priority:
+        add(subjects[key])
+
     best: dict[str, tuple[int, int]] = {}
-    for r in rows:
-        h = hops[r["entity"]]
+    for r in mention_rows:
+        h = expanded[r["entity"]]["hops"]
         cur = best.get(r["doc_id"])
         if cur is None or h < cur[0]:
             best[r["doc_id"]] = (h, r["count"])
         elif h == cur[0]:
             best[r["doc_id"]] = (h, cur[1] + r["count"])
-    ordered = sorted(best.items(), key=lambda kv: (kv[1][0], -kv[1][1], kv[0]))
-    return [doc_id for doc_id, _ in ordered[:limit]]
+    for doc_id, _ in sorted(best.items(), key=lambda kv: (kv[1][0], -kv[1][1], kv[0])):
+        add(doc_id)
+    return chosen
 
 
 def format_fact(f: dict) -> str:
@@ -93,9 +118,14 @@ class HybridRetriever:
             linked = link_entities(question, self.patterns)
             if linked:
                 linked_keys = {e["key"] for e in linked}
-                hops = graph.expand_entities(self.driver, sorted(linked_keys))
-                graph_doc_ids = rank_graph_docs(
-                    graph.documents_mentioning(self.driver, list(hops)), hops, MAX_GRAPH_DOCS
+                expanded = graph.expand_entities(self.driver, sorted(linked_keys))
+                hops = {k: v["hops"] for k, v in expanded.items()}
+                graph_doc_ids = select_graph_docs(
+                    expanded,
+                    graph.subject_docs(self.driver, list(expanded)),
+                    graph.documents_mentioning(self.driver, list(expanded)),
+                    linked_keys,
+                    MAX_GRAPH_DOCS,
                 )
                 graph_chunks = self._chunks_for_docs(graph_doc_ids)
                 near = [k for k, h in hops.items() if h <= 1]

@@ -79,15 +79,30 @@ def entity_names(driver) -> list[dict]:
         RETURN labels(n)[0] AS label, n.key AS key, coalesce(n.name, n.key) AS name""")
 
 
-def expand_entities(driver, keys: list[str], max_hops: int = GRAPH_MAX_HOPS) -> dict[str, int]:
-    """key -> shortest hop distance from any of `keys` (which are hop 0), walking both directions."""
+def expand_entities(driver, keys: list[str], max_hops: int = GRAPH_MAX_HOPS) -> dict[str, dict]:
+    """key -> {"hops": shortest distance from any of `keys` (which are hop 0), "via": relationship types
+    of the last edge on the shortest path(s)}. Walks both directions."""
     rows = run_query(driver, f"""
         MATCH (e) WHERE e.key IN $keys AND NOT e:Document
         MATCH p = (e)-[:{WALK_TYPES}*1..{int(max_hops)}]-(n)
-        RETURN n.key AS key, min(length(p)) AS hops""", keys=keys)
-    hops = {r["key"]: r["hops"] for r in rows}
-    hops.update({k: 0 for k in keys})
-    return hops
+        WITH n, length(p) AS len, type(last(relationships(p))) AS last_type
+        WITH n, min(len) AS hops, collect([len, last_type]) AS pairs
+        RETURN n.key AS key, hops, [x IN pairs WHERE x[0] = hops | x[1]] AS via""", keys=keys)
+    expanded = {r["key"]: {"hops": r["hops"], "via": set(r["via"])} for r in rows}
+    expanded.update({k: {"hops": 0, "via": set()} for k in keys})
+    return expanded
+
+
+def subject_docs(driver, keys: list[str]) -> dict[str, str]:
+    """entity key -> the document that is *about* it: SOP/Incident/Policy share their doc_id; a System's
+    document is the technical manual (the source of its system_owner edge)."""
+    rows = run_query(driver, """
+        MATCH (n) WHERE n.key IN $keys AND (n:SOP OR n:Incident OR n:Policy)
+        MATCH (d:Document {key: n.key}) RETURN n.key AS entity, d.key AS doc_id
+        UNION
+        MATCH (:Person)-[r:RELATED_TO {relation: 'system_owner'}]->(s:System) WHERE s.key IN $keys
+        RETURN s.key AS entity, r.source AS doc_id""", keys=keys)
+    return {r["entity"]: r["doc_id"] for r in rows}
 
 
 def documents_mentioning(driver, keys: list[str]) -> list[dict]:

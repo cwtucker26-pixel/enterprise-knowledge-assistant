@@ -2,15 +2,15 @@ Hybrid retrieval check (top 8; score = cross-encoder logit, higher is better)
 
 Q1: Payment-Service is returning 503s. Which upstream system is the likely cause, and who do I page?
   linked entities: Payment-Service
-  candidate pool: 33 unique chunks (20 vector + 33 from 8 graph docs, overlap merged)
-  graph docs: INC-204, INC-202, manual_payment_service, FAQ-10, SOP-17, manual_apigateway, manual_auth_db, FAQ-01
+  candidate pool: 42 unique chunks (20 vector + 40 from 8 graph docs, overlap merged)
+  graph docs: manual_payment_service, manual_auth_db, manual_datawarehouse, SOP-05, SOP-17, manual_userprofile_api, INC-204, INC-202
   hybrid top 8:
     manual_payment_service   manual_payment_service#1     2.76  both   [manual_payment_service | technical_manual | Payment-Service | Architecture] ## 
-    manual_apigateway        manual_apigateway#1          1.59  both   [manual_apigateway | technical_manual | APIGateway | Architecture] ## Architectu
+    manual_apigateway        manual_apigateway#1          1.59  vector [manual_apigateway | technical_manual | APIGateway | Architecture] ## Architectu
     manual_auth_db           manual_auth_db#1             0.77  graph  [manual_auth_db | technical_manual | Auth-DB | Architecture] ## Architecture  ``
     INC-202                  INC-202#3                    0.14  both   [INC-202 | incident_report | Notification-Service, Payment-Service | Root Cause 
     INC-204                  INC-204#3                   -1.14  both   [INC-204 | incident_report | Payment-Service, Auth-DB | Root Cause Analysis] ## 
-    FAQ-10                   FAQ-10#0                    -1.94  both   [FAQ-10 | faq | Systems] Q: What caused the March 2026 Payment-Service outage? A
+    FAQ-10                   FAQ-10#0                    -1.94  vector [FAQ-10 | faq | Systems] Q: What caused the March 2026 Payment-Service outage? A
     SOP-17                   SOP-17#2                    -2.26  both   [SOP-17 | sop | Procedure] ## Procedure  1. Confirm Payment-Service is returning
     INC-202                  INC-202#1                   -3.20  both   [INC-202 | incident_report | Notification-Service, Payment-Service | Summary] ##
   graph facts (20):
@@ -40,17 +40,17 @@ Q1: Payment-Service is returning 503s. Which upstream system is the likely cause
 
 Q2: Which systems depend on Auth-DB, and who owns each?
   linked entities: Auth-DB
-  candidate pool: 43 unique chunks (20 vector + 39 from 8 graph docs, overlap merged)
-  graph docs: INC-201, INC-204, manual_auth_db, INC-205, manual_datawarehouse, manual_payment_service, manual_userprofile_api, FAQ-03
+  candidate pool: 45 unique chunks (20 vector + 37 from 8 graph docs, overlap merged)
+  graph docs: manual_auth_db, manual_apigateway, manual_datawarehouse, manual_payment_service, manual_userprofile_api, SOP-01, SOP-17, SOP-22
   hybrid top 8:
-    FAQ-03                   FAQ-03#0                     6.85  both   [FAQ-03 | faq | General] Q: Which systems depend on Auth-DB? A: Auth-DB is a fou
+    FAQ-03                   FAQ-03#0                     6.85  vector [FAQ-03 | faq | General] Q: Which systems depend on Auth-DB? A: Auth-DB is a fou
     POL-001                  POL-001#1                    3.21  vector [POL-001 | policy | Scope + Acceptable Use] 2. Scope Covers all ACME-owned or AC
     manual_auth_db           manual_auth_db#0             2.56  both   [manual_auth_db | technical_manual | Auth-DB | Overview] # Technical Manual — Au
     manual_auth_db           manual_auth_db#1             0.38  both   [manual_auth_db | technical_manual | Auth-DB | Architecture] ## Architecture  ``
     manual_datawarehouse     manual_datawarehouse#1       0.23  both   [manual_datawarehouse | technical_manual | DataWarehouse | Architecture] ## Arch
-    INC-201                  INC-201#0                   -0.12  both   [INC-201 | incident_report | Auth-DB, UserProfile-API | Overview] # Incident Rep
+    INC-201                  INC-201#0                   -0.12  vector [INC-201 | incident_report | Auth-DB, UserProfile-API | Overview] # Incident Rep
     manual_payment_service   manual_payment_service#1    -0.61  both   [manual_payment_service | technical_manual | Payment-Service | Architecture] ## 
-    INC-204                  INC-204#0                   -1.02  graph  [INC-204 | incident_report | Payment-Service, Auth-DB | Overview] # Incident Rep
+    manual_apigateway        manual_apigateway#1         -1.21  both   [manual_apigateway | technical_manual | APIGateway | Architecture] ## Architectu
   graph facts (20):
     - APIGateway DEPENDS_ON Auth-DB (source: manual_apigateway; authoritative)
     - DataWarehouse DEPENDS_ON Auth-DB (source: manual_datawarehouse; authoritative)
@@ -74,20 +74,20 @@ Q2: Which systems depend on Auth-DB, and who owns each?
     - Billing OWNS Payment-Service (source: INC-204, manual_payment_service)
   vector@8 docs:        FAQ-03, manual_auth_db, manual_auth_db, POL-003, INC-204, manual_payment_service, INC-201, POL-001
   vector+rerank@8 docs: FAQ-03, POL-001, manual_auth_db, manual_auth_db, manual_datawarehouse, INC-201, manual_payment_service, manual_apigateway
-  -> hybrid 4/6 expected sources; missing: manual_userprofile_api, manual_apigateway
+  -> hybrid 5/6 expected sources; missing: manual_userprofile_api
      not in vector index (excluded): users.csv
 
 Q3: Which past incidents involved Auth-DB, which SOP resolved each, and who owns those SOPs?
   linked entities: Auth-DB
-  candidate pool: 43 unique chunks (20 vector + 39 from 8 graph docs, overlap merged)
-  graph docs: INC-201, INC-204, manual_auth_db, INC-205, manual_datawarehouse, manual_payment_service, manual_userprofile_api, FAQ-03
+  candidate pool: 54 unique chunks (20 vector + 37 from 8 graph docs, overlap merged)
+  graph docs: manual_auth_db, manual_apigateway, manual_datawarehouse, manual_payment_service, manual_userprofile_api, SOP-01, SOP-17, SOP-22
   hybrid top 8:
-    INC-205                  INC-205#4                    3.60  both   [INC-205 | incident_report | APIGateway, Auth-DB | Resolution] ## Resolution  In
-    INC-204                  INC-204#4                    3.57  both   [INC-204 | incident_report | Payment-Service, Auth-DB | Resolution] ## Resolutio
-    INC-201                  INC-201#4                    3.00  both   [INC-201 | incident_report | Auth-DB, UserProfile-API | Resolution] ## Resolutio
-    INC-205                  INC-205#0                    2.56  both   [INC-205 | incident_report | APIGateway, Auth-DB | Overview] # Incident Report —
-    INC-204                  INC-204#0                    2.49  both   [INC-204 | incident_report | Payment-Service, Auth-DB | Overview] # Incident Rep
-    INC-201                  INC-201#0                    2.08  both   [INC-201 | incident_report | Auth-DB, UserProfile-API | Overview] # Incident Rep
+    INC-205                  INC-205#4                    3.60  vector [INC-205 | incident_report | APIGateway, Auth-DB | Resolution] ## Resolution  In
+    INC-204                  INC-204#4                    3.57  vector [INC-204 | incident_report | Payment-Service, Auth-DB | Resolution] ## Resolutio
+    INC-201                  INC-201#4                    3.00  vector [INC-201 | incident_report | Auth-DB, UserProfile-API | Resolution] ## Resolutio
+    INC-205                  INC-205#0                    2.56  vector [INC-205 | incident_report | APIGateway, Auth-DB | Overview] # Incident Report —
+    INC-204                  INC-204#0                    2.49  vector [INC-204 | incident_report | Payment-Service, Auth-DB | Overview] # Incident Rep
+    INC-201                  INC-201#0                    2.08  vector [INC-201 | incident_report | Auth-DB, UserProfile-API | Overview] # Incident Rep
     INC-203                  INC-203#4                   -0.72  vector [INC-203 | incident_report | ReportingPortal, DataWarehouse | Resolution] ## Res
     manual_auth_db           manual_auth_db#3            -0.73  both   [manual_auth_db | technical_manual | Auth-DB | Operations] ## Operations  ### He
   graph facts (20):
@@ -118,12 +118,12 @@ Q3: Which past incidents involved Auth-DB, which SOP resolved each, and who owns
 
 Q4: We suspect customer PII was exfiltrated from UserProfile-API. What do we do, who is told and by when, and can we delete the logs?
   linked entities: UserProfile-API
-  candidate pool: 34 unique chunks (20 vector + 28 from 8 graph docs, overlap merged)
-  graph docs: INC-201, manual_userprofile_api, POL-001, POL-002, FAQ-03, FAQ-08, POL-003, manual_datawarehouse
+  candidate pool: 43 unique chunks (20 vector + 36 from 8 graph docs, overlap merged)
+  graph docs: manual_userprofile_api, manual_auth_db, manual_apigateway, manual_payment_service, SOP-01, INC-201, POL-001, POL-002
   hybrid top 8:
     POL-001                  POL-001#2                    3.03  both   [POL-001 | policy | Prohibited Activities + Enforcement] 4. Prohibited Activitie
     POL-002                  POL-002#1                    0.70  both   [POL-002 | policy | Retention Schedules] 2. Retention Schedules Transaction reco
-    FAQ-08                   FAQ-08#0                     0.68  both   [FAQ-08 | faq | Data & Compliance] Q: Where is customer PII stored? A: Customer 
+    FAQ-08                   FAQ-08#0                     0.68  vector [FAQ-08 | faq | Data & Compliance] Q: Where is customer PII stored? A: Customer 
     manual_userprofile_api   manual_userprofile_api#1    -2.21  both   [manual_userprofile_api | technical_manual | UserProfile-API | Architecture] ## 
     manual_userprofile_api   manual_userprofile_api#0    -2.30  both   [manual_userprofile_api | technical_manual | UserProfile-API | Overview] # Techn
     INC-201                  INC-201#2                   -2.42  both   [INC-201 | incident_report | Auth-DB, UserProfile-API | Impact] ## Impact  - Aut
@@ -156,17 +156,17 @@ Q4: We suspect customer PII was exfiltrated from UserProfile-API. What do we do,
 
 Q5: I work remotely and need access to Auth-DB. What are the requirements?
   linked entities: Auth-DB
-  candidate pool: 43 unique chunks (20 vector + 39 from 8 graph docs, overlap merged)
-  graph docs: INC-201, INC-204, manual_auth_db, INC-205, manual_datawarehouse, manual_payment_service, manual_userprofile_api, FAQ-03
+  candidate pool: 49 unique chunks (20 vector + 37 from 8 graph docs, overlap merged)
+  graph docs: manual_auth_db, manual_apigateway, manual_datawarehouse, manual_payment_service, manual_userprofile_api, SOP-01, SOP-17, SOP-22
   hybrid top 8:
     POL-004                  POL-004#1                    6.56  vector [POL-004 | policy | Security Requirements] 2. Security Requirements Remote worke
     POL-003                  POL-003#1                    2.13  vector [POL-003 | policy | Access Control] 2. Access Control All system access is provi
     SOP-03                   SOP-03#2                     1.72  vector [SOP-03 | sop | Procedure] ## Procedure  1. Receive access request ticket with m
-    FAQ-03                   FAQ-03#0                    -0.27  both   [FAQ-03 | faq | General] Q: Which systems depend on Auth-DB? A: Auth-DB is a fou
+    SOP-22                   SOP-22#2                    -0.18  graph  [SOP-22 | sop | Procedure] ## Procedure  1. Alert Natalia Voss (Security Lead) i
+    FAQ-03                   FAQ-03#0                    -0.27  vector [FAQ-03 | faq | General] Q: Which systems depend on Auth-DB? A: Auth-DB is a fou
     manual_auth_db           manual_auth_db#1            -1.99  both   [manual_auth_db | technical_manual | Auth-DB | Architecture] ## Architecture  ``
     manual_auth_db           manual_auth_db#0            -2.13  both   [manual_auth_db | technical_manual | Auth-DB | Overview] # Technical Manual — Au
-    manual_payment_service   manual_payment_service#1    -3.02  both   [manual_payment_service | technical_manual | Payment-Service | Architecture] ## 
-    manual_userprofile_api   manual_userprofile_api#1    -3.10  both   [manual_userprofile_api | technical_manual | UserProfile-API | Architecture] ## 
+    SOP-17                   SOP-17#2                    -2.77  graph  [SOP-17 | sop | Procedure] ## Procedure  1. Confirm Payment-Service is returning
   graph facts (20):
     - APIGateway DEPENDS_ON Auth-DB (source: manual_apigateway; authoritative)
     - DataWarehouse DEPENDS_ON Auth-DB (source: manual_datawarehouse; authoritative)
@@ -194,14 +194,14 @@ Q5: I work remotely and need access to Auth-DB. What are the requirements?
 
 Q6: Does Auth-DB depend on Payment-Service?
   linked entities: Payment-Service, Auth-DB
-  candidate pool: 47 unique chunks (20 vector + 43 from 8 graph docs, overlap merged)
-  graph docs: INC-204, manual_auth_db, manual_payment_service, INC-201, INC-202, INC-205, SOP-17, manual_apigateway
+  candidate pool: 46 unique chunks (20 vector + 37 from 8 graph docs, overlap merged)
+  graph docs: manual_auth_db, manual_payment_service, manual_apigateway, manual_datawarehouse, manual_userprofile_api, SOP-01, SOP-05, SOP-17
   hybrid top 8:
     manual_payment_service   manual_payment_service#1     9.16  both   [manual_payment_service | technical_manual | Payment-Service | Architecture] ## 
     FAQ-03                   FAQ-03#0                     8.72  vector [FAQ-03 | faq | General] Q: Which systems depend on Auth-DB? A: Auth-DB is a fou
     manual_auth_db           manual_auth_db#1             8.23  both   [manual_auth_db | technical_manual | Auth-DB | Architecture] ## Architecture  ``
-    INC-204                  INC-204#3                    7.52  both   [INC-204 | incident_report | Payment-Service, Auth-DB | Root Cause Analysis] ## 
-    INC-204                  INC-204#1                    7.44  both   [INC-204 | incident_report | Payment-Service, Auth-DB | Summary] ## Summary  On 
+    INC-204                  INC-204#3                    7.52  vector [INC-204 | incident_report | Payment-Service, Auth-DB | Root Cause Analysis] ## 
+    INC-204                  INC-204#1                    7.44  vector [INC-204 | incident_report | Payment-Service, Auth-DB | Summary] ## Summary  On 
     manual_apigateway        manual_apigateway#1          7.23  both   [manual_apigateway | technical_manual | APIGateway | Architecture] ## Architectu
     FAQ-10                   FAQ-10#0                     7.09  vector [FAQ-10 | faq | Systems] Q: What caused the March 2026 Payment-Service outage? A
     SOP-17                   SOP-17#2                     4.64  both   [SOP-17 | sop | Procedure] ## Procedure  1. Confirm Payment-Service is returning
@@ -232,13 +232,13 @@ Q6: Does Auth-DB depend on Payment-Service?
 
 Summary: expected sources found (top results)
       expected  vector@5  vector@8  vec+rerank@8  hybrid@8   pool  graph docs
-  Q1         4         2         2             2         3     33           8
-  Q2         6         2         3             5         4     43           8
-  Q3         6         3         3             3         3     43           8
-  Q4         4         0         1             2         2     34           8
-  Q5         3         2         3             3         3     43           8
-  Q6         3         3         3             3         3     47           8
-  all       26        12        15            18        18
+  Q1         4         2         2             2         3     42           8
+  Q2         6         2         3             5         5     45           8
+  Q3         6         3         3             3         3     54           8
+  Q4         4         0         1             2         2     43           8
+  Q5         3         2         3             3         3     49           8
+  Q6         3         3         3             3         3     46           8
+  all       26        12        15            18        19
   questions fully covered: vector@5 1, vector@8 2, vec+rerank@8 2, hybrid@8 2 (of 6)
 
 Integrity: PASS
