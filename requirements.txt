@@ -11,6 +11,7 @@ langchain-chroma
 # LLM
 langchain
 langchain-anthropic
+langgraph
 
 # Config
 python-dotenv

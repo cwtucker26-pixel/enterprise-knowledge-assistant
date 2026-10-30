@@ -92,7 +92,7 @@ Legend: [R] required by task list, [G] grey area (in project header, implied by 
 - [x] [R] Task 2 — Vector index: chunk, embed, store in ChromaDB, validate retrieval
 - [x] [R] Task 3 — Knowledge graph: extract entities/relations, load Neo4j, validate queries
 - [x] [R] Task 4 — Hybrid retrieval: vector + graph, merge, re-rank
-- [ ] [R] Task 5 — LangGraph agent: web search, query tool, Python execution, multi-step reasoning
+- [x] [R] Task 5 — LangGraph agent: web search, query tool, Python execution, multi-step reasoning
 - [ ] [G] MCP-based integration (wrap one tool as an MCP server)
 - [ ] [R] Task 6 — Guardrails: input validation, prompt-injection detection, PII masking, hallucination check, output filtering
 - [ ] [R] Task 7 — FastAPI: /chat endpoint, sessions, structured responses with citations

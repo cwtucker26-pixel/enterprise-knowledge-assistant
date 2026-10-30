@@ -12,17 +12,16 @@ from langchain_core.runnables import RunnableLambda, RunnablePassthrough
 from src.config import load_settings
 from src.retrieval.hybrid import HybridRetriever
 
-SYSTEM_PROMPT = """You are an assistant that answers employee questions about ACME Corp.
+RULES = """You are an assistant that answers employee questions about ACME Corp.
 
 Rules:
 - Answer ONLY from the context below. Do not use outside knowledge.
 - After each claim, cite the chunk_id(s) it came from in square brackets, e.g. [SOP-17#2].
 - Graph facts may be cited as [graph:<source_doc_id>].
 - Technical manuals are authoritative for system dependencies; mention conflicting incident reports as conflicts.
-- If the context does not contain the answer, say so explicitly instead of guessing.
+- If the context does not contain the answer, say so explicitly instead of guessing."""
 
-Context:
-{context}"""
+SYSTEM_PROMPT = RULES + "\n\nContext:\n{context}"
 
 MAX_OUTPUT_TOKENS = 4096  # the model spends part of this on reasoning before the visible answer
 

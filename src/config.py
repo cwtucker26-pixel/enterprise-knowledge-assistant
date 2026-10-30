@@ -33,6 +33,14 @@ GRAPH_MAX_HOPS = 2
 RERANK_TOP_K = 8
 MAX_CHUNKS_PER_DOC = 2
 
+# Agent (Task 5)
+MAX_AGENT_STEPS = 6  # agent-node calls per question; the last one is made without tools
+SQL_ROW_LIMIT = 50
+SQL_TIMEOUT_S = 5
+PYTHON_TIMEOUT_S = 10
+WEB_MAX_RESULTS = 3
+TOOL_OUTPUT_MAX_CHARS = 4000
+
 REQUIRED_KEYS = [
     "ANTHROPIC_API_KEY",
     "NEO4J_URI",
