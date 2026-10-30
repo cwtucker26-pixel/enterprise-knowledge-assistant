@@ -107,7 +107,7 @@ Legend: [R] required by task list, [G] grey area (in project header, implied by 
 - [x] [R] Task 12 — Performance: latency, caching test, throughput
 
 ### Deliver
-- [ ] [R] GitHub repository
+- [x] [R] GitHub repository (https://github.com/cwtucker26-pixel/enterprise-knowledge-assistant)
 - [x] [R] Documentation: overview, architecture, solution approach, stepwise solution
 - [x] [R] Langfuse tracing screenshots
 - [x] [R] Promptfoo test suite + results

@@ -3,6 +3,8 @@
 A production-style GenAI backend that answers employee questions over a fictional company's (ACME Corp) IT-operations documents.
 Capstone project, Module 14 of an AI Engineering course.
 
+Repository: https://github.com/cwtucker26-pixel/enterprise-knowledge-assistant
+
 It combines **hybrid retrieval** (vector search plus a Neo4j knowledge graph, re-ranked by a cross-encoder), a **LangGraph agent** with
 tools (read-only SQL, web search, Python), **layered guardrails** (prompt-injection detection, PII masking, citation and groundedness
 checks, leak filtering), a **FastAPI** backend with sessions and a semantic cache, **Langfuse** tracing, and automated evaluation
@@ -28,7 +30,7 @@ an Anthropic API key, a Neo4j AuraDB Free instance, a Tavily API key, and a Lang
 the re-ranker (about 90 MB) download from Hugging Face on first use.
 
 ```bash
-git clone <repo-url> enterprise-knowledge-assistant && cd enterprise-knowledge-assistant
+git clone https://github.com/cwtucker26-pixel/enterprise-knowledge-assistant.git && cd enterprise-knowledge-assistant
 python3.12 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt            # versions are pinned to the ones the project was evaluated with
 npm install                                # Promptfoo (Node), only needed for the regression suite
