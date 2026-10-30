@@ -22,3 +22,6 @@ class AgentState(TypedDict):
     blocked: bool  # input blocked, or output replaced by a refusal
     feedback: str  # set by output_guard so the agent can fix its answer on a retry
     guard_retries: int
+    # Follow-up questions are rewritten into a standalone question before retrieval. "" = no rewrite
+    # happened (first turn, or the question was already standalone): retrieve uses the user's words.
+    standalone_question: str

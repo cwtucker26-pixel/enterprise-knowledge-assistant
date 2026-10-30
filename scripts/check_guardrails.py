@@ -135,7 +135,7 @@ def show(state, seconds):
     print(f"  guards: " + ", ".join(f"{g['guard']}={'ok' if g['passed'] else 'FAIL'}" + (f"({g['action']})" if g["action"] not in ('none',) else "")
                                    for g in state.get("guard_results", [])))
     calls = tool_calls_in_order(state)
-    print(f"  tool calls: {[c['name'] for c in calls]}   retrieval ran: {'chunks' in state}   time: {seconds:.1f}s")
+    print(f"  tool calls: {[c['name'] for c in calls]}   retrieval ran: {bool(state.get('chunks'))}   time: {seconds:.1f}s")
     for line in final_answer(state).splitlines():
         print("    " + line)
 
@@ -162,7 +162,7 @@ def blocked_check(layer):
         problems = []
         if not state.get("blocked"):
             problems.append("not blocked")
-        if "chunks" in state:
+        if state.get("chunks"):  # input_guard resets chunks to [] each turn, so test for non-empty
             problems.append("retrieval ran")
         if tool_calls_in_order(state):
             problems.append("tools were called")

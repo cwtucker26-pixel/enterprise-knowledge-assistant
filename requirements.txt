@@ -20,3 +20,7 @@ python-dotenv
 neo4j
 tavily-python
 langfuse
+
+# API
+fastapi
+uvicorn

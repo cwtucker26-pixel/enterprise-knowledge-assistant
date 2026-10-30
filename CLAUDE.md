@@ -95,7 +95,7 @@ Legend: [R] required by task list, [G] grey area (in project header, implied by 
 - [x] [R] Task 5 — LangGraph agent: web search, query tool, Python execution, multi-step reasoning
 - [ ] [G] MCP-based integration (wrap one tool as an MCP server)
 - [x] [R] Task 6 — Guardrails: input validation, prompt-injection detection, PII masking, hallucination check, output filtering
-- [ ] [R] Task 7 — FastAPI: /chat endpoint, sessions, structured responses with citations
+- [x] [R] Task 7 — FastAPI: /chat endpoint, sessions, structured responses with citations
 - [ ] [R] Task 8 — Langfuse: tracing, latency, token usage, errors
 - [ ] [G] Semantic caching
 - [ ] [G] Model routing (Haiku vs Sonnet)

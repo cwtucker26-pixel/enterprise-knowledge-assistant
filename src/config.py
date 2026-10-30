@@ -41,9 +41,10 @@ PYTHON_TIMEOUT_S = 10
 WEB_MAX_RESULTS = 3
 TOOL_OUTPUT_MAX_CHARS = 4000
 
-# Guardrails (Task 6)
+# Guardrails (Task 6) and sessions (Task 7)
 MAX_INPUT_CHARS = 2000
 GUARD_MAX_RETRIES = 1  # how many times a failed answer is sent back to the agent
+MAX_HISTORY_TURNS = 4  # the agent (and the query rewriter) see the current turn plus up to 3 earlier ones
 PROMPT_CANARY = "ACME-CANARY-7f3a9c41"  # unique marker in the system prompt; it appearing in an answer means a leak
 
 REQUIRED_KEYS = [

@@ -30,6 +30,15 @@ def configured_secrets() -> list[str]:
     return [v for v in values if len(v) >= 8]
 
 
+def redact_secrets(text: str, secrets: list[str] | None = None) -> str:
+    """Replace secret patterns and configured secret values with [REDACTED] (used for server logs)."""
+    for _, pat in SECRET_PATTERNS:
+        text = pat.sub("[REDACTED]", text)
+    for value in (configured_secrets() if secrets is None else secrets):
+        text = text.replace(value, "[REDACTED]")
+    return text
+
+
 def _words(text: str) -> list[str]:
     return re.findall(r"\w+", text.lower())
 
@@ -67,31 +76,46 @@ def graph_sources(graph_facts: list[str]) -> set[str]:
     return sources
 
 
+def citation_tokens(answer: str) -> list[str]:
+    """Every bracketed token in the answer, with comma lists split. Markdown link text is skipped."""
+    tokens = []
+    for m in re.finditer(r"\[([^\[\]]+)\]", answer):
+        if answer[m.end():m.end() + 1] == "(":  # markdown link text
+            continue
+        tokens += [t.strip() for t in re.split(rf",\s+{CITATION_START}", m.group(1))]
+    return tokens
+
+
+def is_citation(token: str) -> bool:
+    return bool(re.fullmatch(r"[\w.-]+#\d+", token)) or token.startswith(("graph:", "web:")) or token in ("sql_query", "python_exec")
+
+
+def extract_citations(answer: str) -> list[str]:
+    """The citations the answer makes, in order, without duplicates (other bracketed text such as [EMAIL] is skipped)."""
+    return list(dict.fromkeys(t for t in citation_tokens(answer) if is_citation(t)))
+
+
 def validate_citations(answer: str, chunk_ids: set[str], facts_sources: set[str], tool_names: list[str],
                        web_text: str) -> list[str]:
     """Every citation must point at something that exists this turn. Other bracketed text ([EMAIL],
     markdown link text) is ignored, and an answer with no citations passes (refusals have none)."""
     problems = []
-    for m in re.finditer(r"\[([^\[\]]+)\]", answer):
-        if answer[m.end():m.end() + 1] == "(":  # markdown link text
-            continue
-        for token in re.split(rf",\s+{CITATION_START}", m.group(1)):
-            token = token.strip()
-            if re.fullmatch(r"[\w.-]+#\d+", token):
-                if token not in chunk_ids:
-                    problems.append(f"[{token}] is not one of the retrieved chunks")
-            elif token.startswith("graph:"):
-                if token[6:].strip() not in facts_sources:
-                    problems.append(f"[{token}] is not a source of any graph fact in the context")
-            elif token in ("sql_query", "python_exec"):
-                if token not in tool_names:
-                    problems.append(f"[{token}] cited but {token} was not called")
-            elif token.startswith("web:"):
-                url = token[4:].strip().rstrip(".,;")
-                if "web_search" not in tool_names:
-                    problems.append("[web:...] cited but web_search was not called")
-                elif url not in web_text:
-                    problems.append(f"[web:{url}] is not a URL in the web search results")
+    for token in citation_tokens(answer):
+        if re.fullmatch(r"[\w.-]+#\d+", token):
+            if token not in chunk_ids:
+                problems.append(f"[{token}] is not one of the retrieved chunks")
+        elif token.startswith("graph:"):
+            if token[6:].strip() not in facts_sources:
+                problems.append(f"[{token}] is not a source of any graph fact in the context")
+        elif token in ("sql_query", "python_exec"):
+            if token not in tool_names:
+                problems.append(f"[{token}] cited but {token} was not called")
+        elif token.startswith("web:"):
+            url = token[4:].strip().rstrip(".,;")
+            if "web_search" not in tool_names:
+                problems.append("[web:...] cited but web_search was not called")
+            elif url not in web_text:
+                problems.append(f"[web:{url}] is not a URL in the web search results")
     return problems
 
 
