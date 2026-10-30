@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT))
 
 from src.agent.graph import build_agent_graph, final_answer, run_agent, tool_calls_in_order
 from src.agent.tools import python_exec, sql_query
-from src.config import SQLITE_PATH
+from src.config import GUARD_MAX_RETRIES, SQLITE_PATH
 from src.retrieval.hybrid import HybridRetriever
 
 
@@ -176,8 +176,9 @@ def main() -> int:
     guarded = build_agent_graph(max_steps=2, retriever=retriever)
     state = run_agent(guarded, QUESTIONS[3]["question"])
     show(state, 0)
-    ok = state["steps"] == 2 and not state["messages"][-1].tool_calls and bool(final_answer(state).strip())
-    print(f"  -> {'PASS' if ok else 'FAIL'}: steps={state['steps']}, final message has tool calls: "
+    # the output guard may send a failed answer back once; that retry call is made without tools too
+    ok = state["steps"] <= 2 + GUARD_MAX_RETRIES and not state["messages"][-1].tool_calls and bool(final_answer(state).strip())
+    print(f"  -> {'PASS' if ok else 'FAIL'}: steps={state['steps']} (limit 2 + {GUARD_MAX_RETRIES} guard retry), final message has tool calls: "
           f"{bool(state['messages'][-1].tool_calls)}")
     if not ok:
         failures.append("guard")

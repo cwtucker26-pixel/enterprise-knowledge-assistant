@@ -48,3 +48,28 @@ Remaining gap: the 20-fact cap is tight for hub entities such as Auth-DB. In the
 team of SOP-22 (Security) was cut by the cap, although its procedure owner (Natalia Voss) is present.
 Question-aware fact selection (for example boosting facts by the entity types the question mentions) is a
 possible later improvement and was deliberately not built.
+
+## Guardrails: layered, and the model-based layers fail open
+
+The agent graph is wrapped by two guard nodes (`src/guardrails/`): `input_guard` before retrieval and
+`output_guard` after the agent finishes. Input: validation, PII masking (emails, phones), deterministic
+injection patterns, then a Haiku classifier for what the patterns miss; a blocked input ends the turn with a
+refusal before any retrieval or tool call. Output: a secret / system-prompt leak filter (always blocks), a
+deterministic citation validator, and a Haiku groundedness judge; a citation or groundedness failure sends
+the answer back to the agent once with specific feedback, then returns it with a visible warning. The SQL
+tool masks PII in its own output (data minimisation) and the output guard masks it again as a backstop.
+Every guard records `{guard, passed, action, reason}` in the state for the API and Langfuse.
+
+**Why the two model-based guards (injection classifier, groundedness judge) fail open.** If the Haiku call
+errors, the guard records `skipped` and lets the turn continue instead of blocking it. This is defense in
+depth: the deterministic layers do not depend on any API and always run (injection patterns before the
+classifier; the leak filter and citation validator around the judge), and each side has another layer behind
+it (a missed injection still meets the output guards; an unjudged answer still passed the citation and leak
+checks). Failing closed would turn every transient API error into a refusal for legitimate users, which for
+an internal knowledge assistant is the worse failure; the cost is that during an outage the probabilistic
+layer is absent, which the recorded `skipped` results make visible. The deterministic guards fail closed.
+
+Known limits: input masking means a user cannot look an employee up by email address (the address is
+replaced by `[EMAIL]` before anything sees it); names are deliberately not masked because the assistant
+must say who owns what; the injection patterns and classifier are heuristics, not guarantees (Task 11
+measures the failure rate against `eval/safety/adversarial_prompts.json`).

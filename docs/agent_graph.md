@@ -14,13 +14,19 @@ config:
 ---
 graph TD;
 	__start__([<p>__start__</p>]):::first
+	input_guard(input_guard)
 	retrieve(retrieve)
 	agent(agent)
 	tools(tools)
+	output_guard(output_guard)
 	__end__([<p>__end__</p>]):::last
-	__start__ --> retrieve;
-	agent -.-> __end__;
+	__start__ --> input_guard;
+	agent -.-> output_guard;
 	agent -.-> tools;
+	input_guard -.-> __end__;
+	input_guard -.-> retrieve;
+	output_guard -.-> __end__;
+	output_guard -.-> agent;
 	retrieve --> agent;
 	tools --> agent;
 	classDef default fill:#f2f0ff,line-height:1.2

@@ -9,6 +9,7 @@ from pathlib import Path
 from langchain_core.tools import StructuredTool
 from tavily import TavilyClient
 
+from src.guardrails.pii import mask_pii
 from src.config import (
     PYTHON_TIMEOUT_S,
     SQL_ROW_LIMIT,
@@ -66,7 +67,8 @@ def sql_query(query: str) -> str:
     shown = len(lines) - 1
     more = " (more rows exist: output truncated)" if len(rows) > shown else ""
     lines.append(f"({shown} rows shown{more})")
-    return "\n".join(lines)
+    masked, _ = mask_pii("\n".join(lines))  # data minimisation: the model never sees raw emails or phones
+    return masked
 
 
 SQL_DESCRIPTION = f"""Run a read-only SQL SELECT query (SQLite) over ACME's structured data and return the rows.
@@ -75,7 +77,8 @@ At most {SQL_ROW_LIMIT} rows are returned; aggregate in SQL instead of fetching 
 Tables:
 {_schema_text()}
 Notes: users.active is 1/0; dates are ISO text (YYYY-MM-DD); transactions.status is one of
-completed, pending, failed; transactions.payment_system is always Payment-Service."""
+completed, pending, failed; transactions.payment_system is always Payment-Service.
+Email addresses and phone numbers in results are masked as [EMAIL] and [PHONE]."""
 
 # --- web_search --------------------------------------------------------------------------------
 
@@ -96,7 +99,8 @@ def web_search(query: str) -> str:
 
 WEB_DESCRIPTION = f"""Search the web (Tavily, up to {WEB_MAX_RESULTS} results) for facts about the outside world
 that ACME's internal documents cannot contain (public news, prices, software releases, general knowledge).
-Never use it for ACME internal questions."""
+Never use it for questions about ACME Corp itself (its systems, people, products, finances, stock price or
+leadership): ACME is an internal company and web results would be about unrelated companies."""
 
 # --- python_exec -------------------------------------------------------------------------------
 

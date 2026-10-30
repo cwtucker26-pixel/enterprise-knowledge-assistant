@@ -16,3 +16,9 @@ class AgentState(TypedDict):
     graph_facts: list[str]
     linked_entities: list[dict]
     steps: int  # agent-node calls so far this turn (reset by the retrieve node)
+    # Guardrails. guard_results is overwritten each turn (input_guard starts it, later guards append):
+    # [{"guard", "passed", "action", "reason"}] for the API and Langfuse to show.
+    guard_results: list[dict]
+    blocked: bool  # input blocked, or output replaced by a refusal
+    feedback: str  # set by output_guard so the agent can fix its answer on a retry
+    guard_retries: int
