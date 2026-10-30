@@ -24,6 +24,15 @@ CHUNK_MAX_CHARS = 1000  # hard cap; longer sections are split on line boundaries
 CHUNK_OVERLAP_CHARS = 100  # only used when a section is force-split
 TOP_K = 5
 
+# Hybrid retrieval (Task 4)
+RERANK_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+VECTOR_CANDIDATES = 20  # chunks fetched by vector search before re-ranking
+MAX_GRAPH_DOCS = 8  # documents pulled in via the graph (kept small so the graph's contribution is visible)
+MAX_GRAPH_FACTS = 20
+GRAPH_MAX_HOPS = 2
+RERANK_TOP_K = 8
+MAX_CHUNKS_PER_DOC = 2
+
 REQUIRED_KEYS = [
     "ANTHROPIC_API_KEY",
     "NEO4J_URI",

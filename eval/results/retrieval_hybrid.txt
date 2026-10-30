@@ -1,0 +1,244 @@
+Hybrid retrieval check (top 8; score = cross-encoder logit, higher is better)
+
+Q1: Payment-Service is returning 503s. Which upstream system is the likely cause, and who do I page?
+  linked entities: Payment-Service
+  candidate pool: 33 unique chunks (20 vector + 33 from 8 graph docs, overlap merged)
+  graph docs: INC-204, INC-202, manual_payment_service, FAQ-10, SOP-17, manual_apigateway, manual_auth_db, FAQ-01
+  hybrid top 8:
+    manual_payment_service   manual_payment_service#1     2.76  both   [manual_payment_service | technical_manual | Payment-Service | Architecture] ## 
+    manual_apigateway        manual_apigateway#1          1.59  both   [manual_apigateway | technical_manual | APIGateway | Architecture] ## Architectu
+    manual_auth_db           manual_auth_db#1             0.77  graph  [manual_auth_db | technical_manual | Auth-DB | Architecture] ## Architecture  ``
+    INC-202                  INC-202#3                    0.14  both   [INC-202 | incident_report | Notification-Service, Payment-Service | Root Cause 
+    INC-204                  INC-204#3                   -1.14  both   [INC-204 | incident_report | Payment-Service, Auth-DB | Root Cause Analysis] ## 
+    FAQ-10                   FAQ-10#0                    -1.94  both   [FAQ-10 | faq | Systems] Q: What caused the March 2026 Payment-Service outage? A
+    SOP-17                   SOP-17#2                    -2.26  both   [SOP-17 | sop | Procedure] ## Procedure  1. Confirm Payment-Service is returning
+    INC-202                  INC-202#1                   -3.20  both   [INC-202 | incident_report | Notification-Service, Payment-Service | Summary] ##
+  graph facts (20):
+    - Payment-Service DEPENDS_ON Auth-DB (source: manual_payment_service; authoritative)
+    - Auth-DB DEPENDS_ON Payment-Service (source: INC-204; NOT authoritative (incident report))
+    - Payment-Service DEPENDS_ON Notification-Service (source: INC-202; NOT authoritative (incident report))
+    - Billing OWNS Payment-Service (source: INC-204, manual_payment_service)
+    - APIGateway RELATED_TO[emits_to] Payment-Service (source: manual_apigateway)
+    - Auth-DB RELATED_TO[emits_to] Payment-Service (source: manual_auth_db)
+    - INC-202 RELATED_TO[involved] Payment-Service (source: INC-202)
+    - INC-204 RELATED_TO[affected] Payment-Service (source: INC-204)
+    - Payment-Service RELATED_TO[emits_to] Auth-DB (source: manual_payment_service)
+    - Payment-Service RELATED_TO[emits_to] ReportingPortal (source: manual_payment_service)
+    - Priya Sharma RELATED_TO[system_owner] Payment-Service (source: manual_payment_service)
+    - APIGateway DEPENDS_ON Auth-DB (source: manual_apigateway; authoritative)
+    - DataWarehouse DEPENDS_ON Auth-DB (source: manual_datawarehouse; authoritative)
+    - UserProfile-API DEPENDS_ON Auth-DB (source: manual_userprofile_api; authoritative)
+    - Auth-DB DEPENDS_ON APIGateway (source: INC-205; NOT authoritative (incident report))
+    - DataWarehouse DEPENDS_ON ReportingPortal (source: INC-203; NOT authoritative (incident report))
+    - UserProfile-API DEPENDS_ON Auth-DB (source: INC-201; NOT authoritative (incident report))
+    - Billing OWNS SOP-17 (source: SOP-17)
+    - Data Engineering OWNS Notification-Service (source: INC-202)
+    - Data Engineering OWNS ReportingPortal (source: INC-203)
+  vector@8 docs:        manual_payment_service, FAQ-10, SOP-17, INC-204, INC-204, manual_payment_service, INC-204, INC-202
+  vector+rerank@8 docs: manual_payment_service, manual_apigateway, INC-202, INC-204, FAQ-10, SOP-17, INC-202, INC-204
+  -> hybrid 3/4 expected sources; missing: SOP-05
+
+Q2: Which systems depend on Auth-DB, and who owns each?
+  linked entities: Auth-DB
+  candidate pool: 43 unique chunks (20 vector + 39 from 8 graph docs, overlap merged)
+  graph docs: INC-201, INC-204, manual_auth_db, INC-205, manual_datawarehouse, manual_payment_service, manual_userprofile_api, FAQ-03
+  hybrid top 8:
+    FAQ-03                   FAQ-03#0                     6.85  both   [FAQ-03 | faq | General] Q: Which systems depend on Auth-DB? A: Auth-DB is a fou
+    POL-001                  POL-001#1                    3.21  vector [POL-001 | policy | Scope + Acceptable Use] 2. Scope Covers all ACME-owned or AC
+    manual_auth_db           manual_auth_db#0             2.56  both   [manual_auth_db | technical_manual | Auth-DB | Overview] # Technical Manual — Au
+    manual_auth_db           manual_auth_db#1             0.38  both   [manual_auth_db | technical_manual | Auth-DB | Architecture] ## Architecture  ``
+    manual_datawarehouse     manual_datawarehouse#1       0.23  both   [manual_datawarehouse | technical_manual | DataWarehouse | Architecture] ## Arch
+    INC-201                  INC-201#0                   -0.12  both   [INC-201 | incident_report | Auth-DB, UserProfile-API | Overview] # Incident Rep
+    manual_payment_service   manual_payment_service#1    -0.61  both   [manual_payment_service | technical_manual | Payment-Service | Architecture] ## 
+    INC-204                  INC-204#0                   -1.02  graph  [INC-204 | incident_report | Payment-Service, Auth-DB | Overview] # Incident Rep
+  graph facts (20):
+    - APIGateway DEPENDS_ON Auth-DB (source: manual_apigateway; authoritative)
+    - DataWarehouse DEPENDS_ON Auth-DB (source: manual_datawarehouse; authoritative)
+    - Payment-Service DEPENDS_ON Auth-DB (source: manual_payment_service; authoritative)
+    - UserProfile-API DEPENDS_ON Auth-DB (source: manual_userprofile_api; authoritative)
+    - Auth-DB DEPENDS_ON APIGateway (source: INC-205; NOT authoritative (incident report))
+    - Auth-DB DEPENDS_ON Payment-Service (source: INC-204; NOT authoritative (incident report))
+    - UserProfile-API DEPENDS_ON Auth-DB (source: INC-201; NOT authoritative (incident report))
+    - Infrastructure OWNS Auth-DB (source: INC-201, manual_auth_db)
+    - Auth-DB RELATED_TO[emits_to] Payment-Service (source: manual_auth_db)
+    - Auth-DB RELATED_TO[emits_to] ReportingPortal (source: manual_auth_db)
+    - DataWarehouse RELATED_TO[emits_to] Auth-DB (source: manual_datawarehouse)
+    - INC-201 RELATED_TO[affected] Auth-DB (source: INC-201)
+    - INC-204 RELATED_TO[involved] Auth-DB (source: INC-204)
+    - INC-205 RELATED_TO[involved] Auth-DB (source: INC-205)
+    - Marcus Lee RELATED_TO[system_owner] Auth-DB (source: manual_auth_db)
+    - Payment-Service RELATED_TO[emits_to] Auth-DB (source: manual_payment_service)
+    - UserProfile-API RELATED_TO[emits_to] Auth-DB (source: manual_userprofile_api)
+    - DataWarehouse DEPENDS_ON ReportingPortal (source: INC-203; NOT authoritative (incident report))
+    - Payment-Service DEPENDS_ON Notification-Service (source: INC-202; NOT authoritative (incident report))
+    - Billing OWNS Payment-Service (source: INC-204, manual_payment_service)
+  vector@8 docs:        FAQ-03, manual_auth_db, manual_auth_db, POL-003, INC-204, manual_payment_service, INC-201, POL-001
+  vector+rerank@8 docs: FAQ-03, POL-001, manual_auth_db, manual_auth_db, manual_datawarehouse, INC-201, manual_payment_service, manual_apigateway
+  -> hybrid 4/6 expected sources; missing: manual_userprofile_api, manual_apigateway
+     not in vector index (excluded): users.csv
+
+Q3: Which past incidents involved Auth-DB, which SOP resolved each, and who owns those SOPs?
+  linked entities: Auth-DB
+  candidate pool: 43 unique chunks (20 vector + 39 from 8 graph docs, overlap merged)
+  graph docs: INC-201, INC-204, manual_auth_db, INC-205, manual_datawarehouse, manual_payment_service, manual_userprofile_api, FAQ-03
+  hybrid top 8:
+    INC-205                  INC-205#4                    3.60  both   [INC-205 | incident_report | APIGateway, Auth-DB | Resolution] ## Resolution  In
+    INC-204                  INC-204#4                    3.57  both   [INC-204 | incident_report | Payment-Service, Auth-DB | Resolution] ## Resolutio
+    INC-201                  INC-201#4                    3.00  both   [INC-201 | incident_report | Auth-DB, UserProfile-API | Resolution] ## Resolutio
+    INC-205                  INC-205#0                    2.56  both   [INC-205 | incident_report | APIGateway, Auth-DB | Overview] # Incident Report —
+    INC-204                  INC-204#0                    2.49  both   [INC-204 | incident_report | Payment-Service, Auth-DB | Overview] # Incident Rep
+    INC-201                  INC-201#0                    2.08  both   [INC-201 | incident_report | Auth-DB, UserProfile-API | Overview] # Incident Rep
+    INC-203                  INC-203#4                   -0.72  vector [INC-203 | incident_report | ReportingPortal, DataWarehouse | Resolution] ## Res
+    manual_auth_db           manual_auth_db#3            -0.73  both   [manual_auth_db | technical_manual | Auth-DB | Operations] ## Operations  ### He
+  graph facts (20):
+    - APIGateway DEPENDS_ON Auth-DB (source: manual_apigateway; authoritative)
+    - DataWarehouse DEPENDS_ON Auth-DB (source: manual_datawarehouse; authoritative)
+    - Payment-Service DEPENDS_ON Auth-DB (source: manual_payment_service; authoritative)
+    - UserProfile-API DEPENDS_ON Auth-DB (source: manual_userprofile_api; authoritative)
+    - Auth-DB DEPENDS_ON APIGateway (source: INC-205; NOT authoritative (incident report))
+    - Auth-DB DEPENDS_ON Payment-Service (source: INC-204; NOT authoritative (incident report))
+    - UserProfile-API DEPENDS_ON Auth-DB (source: INC-201; NOT authoritative (incident report))
+    - Infrastructure OWNS Auth-DB (source: INC-201, manual_auth_db)
+    - Auth-DB RELATED_TO[emits_to] Payment-Service (source: manual_auth_db)
+    - Auth-DB RELATED_TO[emits_to] ReportingPortal (source: manual_auth_db)
+    - DataWarehouse RELATED_TO[emits_to] Auth-DB (source: manual_datawarehouse)
+    - INC-201 RELATED_TO[affected] Auth-DB (source: INC-201)
+    - INC-204 RELATED_TO[involved] Auth-DB (source: INC-204)
+    - INC-205 RELATED_TO[involved] Auth-DB (source: INC-205)
+    - Marcus Lee RELATED_TO[system_owner] Auth-DB (source: manual_auth_db)
+    - Payment-Service RELATED_TO[emits_to] Auth-DB (source: manual_payment_service)
+    - UserProfile-API RELATED_TO[emits_to] Auth-DB (source: manual_userprofile_api)
+    - DataWarehouse DEPENDS_ON ReportingPortal (source: INC-203; NOT authoritative (incident report))
+    - Payment-Service DEPENDS_ON Notification-Service (source: INC-202; NOT authoritative (incident report))
+    - Billing OWNS Payment-Service (source: INC-204, manual_payment_service)
+  vector@8 docs:        INC-201, INC-204, INC-201, INC-205, INC-204, INC-204, INC-205, INC-201
+  vector+rerank@8 docs: INC-205, INC-204, INC-201, INC-205, INC-204, INC-201, INC-203, manual_auth_db
+  -> hybrid 3/6 expected sources; missing: SOP-01, SOP-17, SOP-22
+     not in vector index (excluded): doc_metadata.csv
+
+Q4: We suspect customer PII was exfiltrated from UserProfile-API. What do we do, who is told and by when, and can we delete the logs?
+  linked entities: UserProfile-API
+  candidate pool: 34 unique chunks (20 vector + 28 from 8 graph docs, overlap merged)
+  graph docs: INC-201, manual_userprofile_api, POL-001, POL-002, FAQ-03, FAQ-08, POL-003, manual_datawarehouse
+  hybrid top 8:
+    POL-001                  POL-001#2                    3.03  both   [POL-001 | policy | Prohibited Activities + Enforcement] 4. Prohibited Activitie
+    POL-002                  POL-002#1                    0.70  both   [POL-002 | policy | Retention Schedules] 2. Retention Schedules Transaction reco
+    FAQ-08                   FAQ-08#0                     0.68  both   [FAQ-08 | faq | Data & Compliance] Q: Where is customer PII stored? A: Customer 
+    manual_userprofile_api   manual_userprofile_api#1    -2.21  both   [manual_userprofile_api | technical_manual | UserProfile-API | Architecture] ## 
+    manual_userprofile_api   manual_userprofile_api#0    -2.30  both   [manual_userprofile_api | technical_manual | UserProfile-API | Overview] # Techn
+    INC-201                  INC-201#2                   -2.42  both   [INC-201 | incident_report | Auth-DB, UserProfile-API | Impact] ## Impact  - Aut
+    POL-002                  POL-002#2                   -2.51  both   [POL-002 | policy | Data Deletion + Backup Procedures] 3. Data Deletion Deletion
+    INC-201                  INC-201#3                   -2.53  both   [INC-201 | incident_report | Auth-DB, UserProfile-API | Root Cause Analysis] ## 
+  graph facts (20):
+    - UserProfile-API DEPENDS_ON Auth-DB (source: manual_userprofile_api; authoritative)
+    - UserProfile-API DEPENDS_ON Auth-DB (source: INC-201; NOT authoritative (incident report))
+    - Customer Success OWNS UserProfile-API (source: manual_userprofile_api)
+    - Amara Okafor RELATED_TO[system_owner] UserProfile-API (source: manual_userprofile_api)
+    - INC-201 RELATED_TO[involved] UserProfile-API (source: INC-201)
+    - UserProfile-API RELATED_TO[emits_to] Auth-DB (source: manual_userprofile_api)
+    - UserProfile-API RELATED_TO[emits_to] DataWarehouse (source: manual_userprofile_api)
+    - APIGateway DEPENDS_ON Auth-DB (source: manual_apigateway; authoritative)
+    - DataWarehouse DEPENDS_ON Auth-DB (source: manual_datawarehouse; authoritative)
+    - Payment-Service DEPENDS_ON Auth-DB (source: manual_payment_service; authoritative)
+    - Auth-DB DEPENDS_ON APIGateway (source: INC-205; NOT authoritative (incident report))
+    - Auth-DB DEPENDS_ON Payment-Service (source: INC-204; NOT authoritative (incident report))
+    - DataWarehouse DEPENDS_ON ReportingPortal (source: INC-203; NOT authoritative (incident report))
+    - Amara Okafor MANAGES Customer Success (source: users.csv)
+    - Data Engineering OWNS DataWarehouse (source: manual_datawarehouse)
+    - INC-201 RESOLVED_BY SOP-01 (source: INC-201)
+    - Infrastructure OWNS Auth-DB (source: INC-201, manual_auth_db)
+    - Auth-DB RELATED_TO[emits_to] Payment-Service (source: manual_auth_db)
+    - Auth-DB RELATED_TO[emits_to] ReportingPortal (source: manual_auth_db)
+    - Chen Wei RELATED_TO[system_owner] DataWarehouse (source: manual_datawarehouse)
+  vector@8 docs:        FAQ-08, INC-201, INC-201, manual_userprofile_api, manual_userprofile_api, POL-001, manual_userprofile_api, INC-201
+  vector+rerank@8 docs: POL-001, POL-002, FAQ-08, manual_userprofile_api, manual_userprofile_api, INC-201, POL-002, INC-201
+  -> hybrid 2/4 expected sources; missing: POL-003, SOP-22
+
+Q5: I work remotely and need access to Auth-DB. What are the requirements?
+  linked entities: Auth-DB
+  candidate pool: 43 unique chunks (20 vector + 39 from 8 graph docs, overlap merged)
+  graph docs: INC-201, INC-204, manual_auth_db, INC-205, manual_datawarehouse, manual_payment_service, manual_userprofile_api, FAQ-03
+  hybrid top 8:
+    POL-004                  POL-004#1                    6.56  vector [POL-004 | policy | Security Requirements] 2. Security Requirements Remote worke
+    POL-003                  POL-003#1                    2.13  vector [POL-003 | policy | Access Control] 2. Access Control All system access is provi
+    SOP-03                   SOP-03#2                     1.72  vector [SOP-03 | sop | Procedure] ## Procedure  1. Receive access request ticket with m
+    FAQ-03                   FAQ-03#0                    -0.27  both   [FAQ-03 | faq | General] Q: Which systems depend on Auth-DB? A: Auth-DB is a fou
+    manual_auth_db           manual_auth_db#1            -1.99  both   [manual_auth_db | technical_manual | Auth-DB | Architecture] ## Architecture  ``
+    manual_auth_db           manual_auth_db#0            -2.13  both   [manual_auth_db | technical_manual | Auth-DB | Overview] # Technical Manual — Au
+    manual_payment_service   manual_payment_service#1    -3.02  both   [manual_payment_service | technical_manual | Payment-Service | Architecture] ## 
+    manual_userprofile_api   manual_userprofile_api#1    -3.10  both   [manual_userprofile_api | technical_manual | UserProfile-API | Architecture] ## 
+  graph facts (20):
+    - APIGateway DEPENDS_ON Auth-DB (source: manual_apigateway; authoritative)
+    - DataWarehouse DEPENDS_ON Auth-DB (source: manual_datawarehouse; authoritative)
+    - Payment-Service DEPENDS_ON Auth-DB (source: manual_payment_service; authoritative)
+    - UserProfile-API DEPENDS_ON Auth-DB (source: manual_userprofile_api; authoritative)
+    - Auth-DB DEPENDS_ON APIGateway (source: INC-205; NOT authoritative (incident report))
+    - Auth-DB DEPENDS_ON Payment-Service (source: INC-204; NOT authoritative (incident report))
+    - UserProfile-API DEPENDS_ON Auth-DB (source: INC-201; NOT authoritative (incident report))
+    - Infrastructure OWNS Auth-DB (source: INC-201, manual_auth_db)
+    - Auth-DB RELATED_TO[emits_to] Payment-Service (source: manual_auth_db)
+    - Auth-DB RELATED_TO[emits_to] ReportingPortal (source: manual_auth_db)
+    - DataWarehouse RELATED_TO[emits_to] Auth-DB (source: manual_datawarehouse)
+    - INC-201 RELATED_TO[affected] Auth-DB (source: INC-201)
+    - INC-204 RELATED_TO[involved] Auth-DB (source: INC-204)
+    - INC-205 RELATED_TO[involved] Auth-DB (source: INC-205)
+    - Marcus Lee RELATED_TO[system_owner] Auth-DB (source: manual_auth_db)
+    - Payment-Service RELATED_TO[emits_to] Auth-DB (source: manual_payment_service)
+    - UserProfile-API RELATED_TO[emits_to] Auth-DB (source: manual_userprofile_api)
+    - DataWarehouse DEPENDS_ON ReportingPortal (source: INC-203; NOT authoritative (incident report))
+    - Payment-Service DEPENDS_ON Notification-Service (source: INC-202; NOT authoritative (incident report))
+    - Billing OWNS Payment-Service (source: INC-204, manual_payment_service)
+  vector@8 docs:        POL-004, manual_auth_db, manual_auth_db, manual_auth_db, POL-003, FAQ-03, INC-201, SOP-03
+  vector+rerank@8 docs: POL-004, POL-003, SOP-03, FAQ-03, manual_auth_db, manual_auth_db, manual_payment_service, manual_userprofile_api
+  -> hybrid 3/3 expected sources
+
+Q6: Does Auth-DB depend on Payment-Service?
+  linked entities: Payment-Service, Auth-DB
+  candidate pool: 47 unique chunks (20 vector + 43 from 8 graph docs, overlap merged)
+  graph docs: INC-204, manual_auth_db, manual_payment_service, INC-201, INC-202, INC-205, SOP-17, manual_apigateway
+  hybrid top 8:
+    manual_payment_service   manual_payment_service#1     9.16  both   [manual_payment_service | technical_manual | Payment-Service | Architecture] ## 
+    FAQ-03                   FAQ-03#0                     8.72  vector [FAQ-03 | faq | General] Q: Which systems depend on Auth-DB? A: Auth-DB is a fou
+    manual_auth_db           manual_auth_db#1             8.23  both   [manual_auth_db | technical_manual | Auth-DB | Architecture] ## Architecture  ``
+    INC-204                  INC-204#3                    7.52  both   [INC-204 | incident_report | Payment-Service, Auth-DB | Root Cause Analysis] ## 
+    INC-204                  INC-204#1                    7.44  both   [INC-204 | incident_report | Payment-Service, Auth-DB | Summary] ## Summary  On 
+    manual_apigateway        manual_apigateway#1          7.23  both   [manual_apigateway | technical_manual | APIGateway | Architecture] ## Architectu
+    FAQ-10                   FAQ-10#0                     7.09  vector [FAQ-10 | faq | Systems] Q: What caused the March 2026 Payment-Service outage? A
+    SOP-17                   SOP-17#2                     4.64  both   [SOP-17 | sop | Procedure] ## Procedure  1. Confirm Payment-Service is returning
+  graph facts (20):
+    - APIGateway DEPENDS_ON Auth-DB (source: manual_apigateway; authoritative)
+    - DataWarehouse DEPENDS_ON Auth-DB (source: manual_datawarehouse; authoritative)
+    - Payment-Service DEPENDS_ON Auth-DB (source: manual_payment_service; authoritative)
+    - UserProfile-API DEPENDS_ON Auth-DB (source: manual_userprofile_api; authoritative)
+    - Auth-DB DEPENDS_ON APIGateway (source: INC-205; NOT authoritative (incident report))
+    - Auth-DB DEPENDS_ON Payment-Service (source: INC-204; NOT authoritative (incident report))
+    - Payment-Service DEPENDS_ON Notification-Service (source: INC-202; NOT authoritative (incident report))
+    - UserProfile-API DEPENDS_ON Auth-DB (source: INC-201; NOT authoritative (incident report))
+    - Billing OWNS Payment-Service (source: INC-204, manual_payment_service)
+    - Infrastructure OWNS Auth-DB (source: INC-201, manual_auth_db)
+    - APIGateway RELATED_TO[emits_to] Payment-Service (source: manual_apigateway)
+    - Auth-DB RELATED_TO[emits_to] Payment-Service (source: manual_auth_db)
+    - Auth-DB RELATED_TO[emits_to] ReportingPortal (source: manual_auth_db)
+    - DataWarehouse RELATED_TO[emits_to] Auth-DB (source: manual_datawarehouse)
+    - INC-201 RELATED_TO[affected] Auth-DB (source: INC-201)
+    - INC-202 RELATED_TO[involved] Payment-Service (source: INC-202)
+    - INC-204 RELATED_TO[involved] Auth-DB (source: INC-204)
+    - INC-204 RELATED_TO[affected] Payment-Service (source: INC-204)
+    - INC-205 RELATED_TO[involved] Auth-DB (source: INC-205)
+    - Marcus Lee RELATED_TO[system_owner] Auth-DB (source: manual_auth_db)
+  vector@8 docs:        FAQ-03, manual_payment_service, manual_auth_db, INC-204, INC-204, manual_auth_db, manual_payment_service, FAQ-10
+  vector+rerank@8 docs: manual_payment_service, FAQ-03, manual_auth_db, INC-204, INC-204, manual_apigateway, FAQ-10, SOP-17
+  -> hybrid 3/3 expected sources
+
+Summary: expected sources found (top results)
+      expected  vector@5  vector@8  vec+rerank@8  hybrid@8   pool  graph docs
+  Q1         4         2         2             2         3     33           8
+  Q2         6         2         3             5         4     43           8
+  Q3         6         3         3             3         3     43           8
+  Q4         4         0         1             2         2     34           8
+  Q5         3         2         3             3         3     43           8
+  Q6         3         3         3             3         3     47           8
+  all       26        12        15            18        18
+  questions fully covered: vector@5 1, vector@8 2, vec+rerank@8 2, hybrid@8 2 (of 6)
+
+Integrity: PASS

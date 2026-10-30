@@ -3,13 +3,18 @@ from contextlib import contextmanager
 
 from neo4j import GraphDatabase
 
-from src.config import load_settings
+from src.config import GRAPH_MAX_HOPS, load_settings
+
+
+def make_driver():
+    """A long-lived driver (the caller closes it). Use get_driver() for a with-block."""
+    s = load_settings()
+    return GraphDatabase.driver(s.neo4j_uri, auth=(s.neo4j_username, s.neo4j_password))
 
 
 @contextmanager
 def get_driver():
-    s = load_settings()
-    driver = GraphDatabase.driver(s.neo4j_uri, auth=(s.neo4j_username, s.neo4j_password))
+    driver = make_driver()
     try:
         yield driver
     finally:
@@ -61,3 +66,40 @@ def unconfirmed_dependencies(driver) -> list[dict]:
         WHERE NOT EXISTS { (a)-[:DEPENDS_ON {authoritative: true}]->(b) }
           AND NOT EXISTS { (b)-[:DEPENDS_ON]->(a) }
         RETURN a.key AS a, b.key AS b, e.source AS source ORDER BY source""")
+
+
+# --- Queries used by hybrid retrieval (Task 4) ---
+WALK_TYPES = "DEPENDS_ON|OWNS|MANAGES|RESOLVED_BY|RELATED_TO"  # MEMBER_OF/MENTIONS are not walked
+
+
+def entity_names(driver) -> list[dict]:
+    """Every non-Document node: label, key (unique id) and the name a user would type."""
+    return run_query(driver, """
+        MATCH (n) WHERE NOT n:Document
+        RETURN labels(n)[0] AS label, n.key AS key, coalesce(n.name, n.key) AS name""")
+
+
+def expand_entities(driver, keys: list[str], max_hops: int = GRAPH_MAX_HOPS) -> dict[str, int]:
+    """key -> shortest hop distance from any of `keys` (which are hop 0), walking both directions."""
+    rows = run_query(driver, f"""
+        MATCH (e) WHERE e.key IN $keys AND NOT e:Document
+        MATCH p = (e)-[:{WALK_TYPES}*1..{int(max_hops)}]-(n)
+        RETURN n.key AS key, min(length(p)) AS hops""", keys=keys)
+    hops = {r["key"]: r["hops"] for r in rows}
+    hops.update({k: 0 for k in keys})
+    return hops
+
+
+def documents_mentioning(driver, keys: list[str]) -> list[dict]:
+    return run_query(driver, """
+        MATCH (d:Document)-[m:MENTIONS]->(n) WHERE n.key IN $keys
+        RETURN d.key AS doc_id, n.key AS entity, m.count AS count""", keys=keys)
+
+
+def edges_touching(driver, keys: list[str]) -> list[dict]:
+    return run_query(driver, f"""
+        MATCH (a)-[r:{WALK_TYPES}]->(b)
+        WHERE a.key IN $keys OR b.key IN $keys
+        RETURN a.key AS a_key, coalesce(a.name, a.key) AS a, type(r) AS type, r.relation AS relation,
+               r.authoritative AS authoritative, r.source AS source,
+               b.key AS b_key, coalesce(b.name, b.key) AS b""", keys=keys)
