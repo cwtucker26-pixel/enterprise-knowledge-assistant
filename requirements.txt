@@ -1,29 +1,39 @@
+# Pinned to the versions this project was built and evaluated with (Python 3.12.9, macOS).
+# Only packages the code imports directly are pinned; everything else is resolved by pip as a dependency.
+# Install:  python3.12 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
+
 # Ingestion
-pypdf
-pandas
+pypdf==6.21.4
+pandas==3.1.0
+numpy==2.5.4
 
 # Embeddings and vector store
-sentence-transformers
-chromadb
-langchain-huggingface
-langchain-chroma
+sentence-transformers==6.2.0
+chromadb==1.5.9
+langchain-huggingface==1.2.3
+langchain-chroma==1.1.0
 
-# LLM
-langchain
-langchain-anthropic
-langgraph
+# LLM and agent
+langchain==1.4.7
+langchain-core==1.7.3
+langchain-anthropic==1.7.7
+langgraph==1.2.18
 
 # Config
-python-dotenv
+python-dotenv==1.2.4
 
-# Service clients (used by scripts/check_setup.py)
-neo4j
-tavily-python
-langfuse
+# Service clients
+neo4j==6.4.1
+tavily-python==0.8.5
+langfuse==5.0.4
 
 # API
-fastapi
-uvicorn
+fastapi==0.162.0
+uvicorn==0.54.0
+httpx==0.28.1
+pydantic==2.14.2
 
-# Evaluation
-ragas
+# Evaluation (RAGAS 0.4.3 only imports with the compatibility shim in eval/ragas/compat.py, which assumes this
+# langchain-community version; see that file)
+ragas==0.4.3
+langchain-community==0.4.2

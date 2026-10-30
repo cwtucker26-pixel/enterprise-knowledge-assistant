@@ -108,12 +108,12 @@ Legend: [R] required by task list, [G] grey area (in project header, implied by 
 
 ### Deliver
 - [ ] [R] GitHub repository
-- [ ] [R] Documentation: overview, architecture, solution approach, stepwise solution
-- [ ] [R] Langfuse tracing screenshots
-- [ ] [R] Promptfoo test suite + results
-- [ ] [R] RAGAS evaluation report
-- [ ] [R] Safety scorecard
-- [ ] [R] Walkthrough: business problem, architecture, retrieval strategy, agent workflow,
+- [x] [R] Documentation: overview, architecture, solution approach, stepwise solution
+- [x] [R] Langfuse tracing screenshots
+- [x] [R] Promptfoo test suite + results
+- [x] [R] RAGAS evaluation report
+- [x] [R] Safety scorecard
+- [x] [R] Walkthrough: business problem, architecture, retrieval strategy, agent workflow,
       guardrails, evaluation results, observability insights, challenges/improvements
 
 ### Out of scope (do not build)
