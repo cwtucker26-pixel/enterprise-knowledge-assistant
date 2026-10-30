@@ -41,6 +41,12 @@ PYTHON_TIMEOUT_S = 10
 WEB_MAX_RESULTS = 3
 TOOL_OUTPUT_MAX_CHARS = 4000
 
+# Semantic answer cache (Task 12). Disable with the environment variable CACHE_ENABLED=false (or per request with use_cache=false).
+CACHE_ENABLED = os.getenv("CACHE_ENABLED", "true").strip().lower() not in ("0", "false", "no", "off")
+CACHE_SIMILARITY = 0.95  # cosine threshold; a hit ALSO needs the same structural signature (see src/api/cache.py)
+CACHE_TTL_S = 3600
+CACHE_MAX_ENTRIES = 500
+
 # Guardrails (Task 6) and sessions (Task 7)
 MAX_INPUT_CHARS = 2000
 GUARD_MAX_RETRIES = 1  # how many times a failed answer is sent back to the agent

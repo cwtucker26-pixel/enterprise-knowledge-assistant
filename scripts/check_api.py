@@ -19,6 +19,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from types import SimpleNamespace as NS
+
 from fastapi.testclient import TestClient
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 
@@ -76,8 +78,10 @@ def live_case(label, fn):
     failures.append(label)
 
 
-def chat(client, question, session_id=None):
-    body = {"question": question}
+def chat(client, question, session_id=None, use_cache=False):
+    # The semantic cache is bypassed by default so these tests exercise the real pipeline (graph spans, guards, tags);
+    # cache behaviour has its own section below.
+    body = {"question": question, "use_cache": use_cache}
     if session_id:
         body["session_id"] = session_id
     t0 = time.monotonic()
@@ -174,6 +178,9 @@ def live_tests(client):
     real_agent = client.app.state.agent
 
     class Boom:
+        def get_state(self, config):  # the API asks for the session state before running the agent
+            return NS(values={})
+
         def invoke(self, *a, **k):
             raise RuntimeError("db exploded with key sk-ant-api03-SECRETSECRETSECRET")
 
@@ -200,10 +207,12 @@ def as_dict(o):
     return o.model_dump() if hasattr(o, "model_dump") else dict(o.__dict__)
 
 
-def fetch_trace(lf, trace_id=None, session_id=None, timeout=150):
-    """Poll Langfuse until the trace's root span has been ingested; return all its observations as dicts."""
+def fetch_trace(lf, trace_id=None, session_id=None, timeout=180):
+    """Poll Langfuse until the trace is complete. Observations are ingested out of order (the root span can be visible
+    while some child spans are not yet), so "root present" is not enough: wait until the observation count has stopped
+    changing for two consecutive polls."""
     deadline = time.monotonic() + timeout
-    obs = []
+    obs, last_count, stable = [], -1, 0
     while time.monotonic() < deadline:
         lf.flush()
         r = lf.api.observations.get_many(
@@ -212,7 +221,10 @@ def fetch_trace(lf, trace_id=None, session_id=None, timeout=150):
             expand_metadata="blocked,warning,tools_used,rewritten_query,guards_flagged,guard_results,sources")
         obs = [as_dict(o) for o in r.data]
         root = next((o for o in obs if o.get("name") == "chat" and o.get("is_root_observation")), None)
-        if root and (root.get("output") is not None or root.get("level") == "ERROR"):
+        complete = root and (root.get("output") is not None or root.get("level") == "ERROR")
+        stable = stable + 1 if (complete and len(obs) == last_count) else 0
+        last_count = len(obs)
+        if stable >= 2:
             return obs
         time.sleep(4)
     return obs
@@ -292,6 +304,9 @@ def langfuse_tests(client, lf):
     real_agent = client.app.state.agent
 
     class Boom:
+        def get_state(self, config):  # the API asks for the session state before running the agent
+            return NS(values={})
+
         def invoke(self, *a, **k):
             raise RuntimeError("db exploded with key sk-ant-api03-SECRETSECRETSECRET")
 
@@ -307,6 +322,23 @@ def langfuse_tests(client, lf):
     expect("the root span is level ERROR with the exception type", root.get("level") == "ERROR" and "RuntimeError" in str(root.get("status_message")), f"{root.get('level')} {root.get('status_message')}")
     expect("the trace is tagged error", "error" in (root.get("tags") or []), str(root.get("tags")))
     expect("no secret in the error trace", "SECRETSECRET" not in json.dumps(obs, default=str))
+
+    print("\n[semantic cache]")
+    q = "Who is the system owner of UserProfile-API?"
+    r1, _ = chat(client, q, f"check-cache-a-{uuid.uuid4().hex[:6]}", use_cache=True)
+    r2, secs = chat(client, q, f"check-cache-b-{uuid.uuid4().hex[:6]}", use_cache=True)
+    j1, j2 = r1.json(), r2.json()
+    expect("first ask is a MISS and the answer is not flagged as cached", r1.headers.get("x-cache") == "MISS" and not j1["cache_hit"])
+    expect("second ask (new session) is a HIT, flagged in the body and the header", r2.headers.get("x-cache") == "HIT" and j2["cache_hit"])
+    expect("the replayed answer, citations and sources equal the original", (j1["answer"], j1["citations"], j1["sources"]) == (j2["answer"], j2["citations"], j2["sources"]))
+    expect("a hit is fast (no LLM call)", secs < 3, f"{secs:.2f}s")
+    expect("a hit records a semantic_cache entry in guard_results", any(g["guard"] == "semantic_cache" and g["action"] == "hit" for g in j2["guard_results"]))
+    obs = fetch_trace(lf, trace_id=r2.headers.get("x-trace-id"))
+    expect("the hit's Langfuse trace is tagged cache-hit and has no LLM spans", "cache-hit" in (root_of(obs).get("tags") or []) and not {"agent", "retrieve"} & names(obs), str(root_of(obs).get("tags")))
+    r3, _ = chat(client, q, f"check-cache-c-{uuid.uuid4().hex[:6]}", use_cache=False)
+    expect("use_cache=false bypasses the cache (X-Cache: BYPASS, not a hit)", r3.headers.get("x-cache") == "BYPASS" and not r3.json()["cache_hit"])
+    health = client.get("/health").json()
+    expect("/health reports the cache", health["cache"]["enabled"] and health["cache"]["entries"] >= 1 and health["cache"]["hits"] >= 1, str(health["cache"]))
 
     print("\nTrace URLs (open these for screenshots):")
     for label, url in urls.items():

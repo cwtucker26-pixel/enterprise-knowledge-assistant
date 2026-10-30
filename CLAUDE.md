@@ -97,14 +97,14 @@ Legend: [R] required by task list, [G] grey area (in project header, implied by 
 - [x] [R] Task 6 — Guardrails: input validation, prompt-injection detection, PII masking, hallucination check, output filtering
 - [x] [R] Task 7 — FastAPI: /chat endpoint, sessions, structured responses with citations
 - [x] [R] Task 8 — Langfuse: tracing, latency, token usage, errors
-- [ ] [G] Semantic caching
-- [ ] [G] Model routing (Haiku vs Sonnet)
+- [x] [G] Semantic caching
+- [ ] [G] Model routing (Haiku vs Sonnet) — deliberately skipped, see eval/results/performance_report.md
 
 ### Evaluate
 - [x] [R] Task 9 — Promptfoo suite, 30+ cases, regression run, failure analysis
 - [x] [R] Task 10 — RAGAS: faithfulness, answer relevance, context precision, context recall
 - [x] [R] Task 11 — Safety eval: adversarial prompts, failure rate, safety scorecard
-- [ ] [R] Task 12 — Performance: latency, caching test, throughput
+- [x] [R] Task 12 — Performance: latency, caching test, throughput
 
 ### Deliver
 - [ ] [R] GitHub repository

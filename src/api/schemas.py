@@ -8,6 +8,7 @@ class ChatRequest(BaseModel):
     question: str = Field(description=f"The user's question (1 to {MAX_INPUT_CHARS} characters)")
     session_id: str | None = Field(default=None, pattern=r"^[A-Za-z0-9_-]{1,64}$",
                                    description="Continue an existing session; a UUID is generated if missing")
+    use_cache: bool = Field(default=True, description="Set false to bypass the semantic answer cache for this request")
 
     @field_validator("question")
     @classmethod
@@ -43,3 +44,4 @@ class ChatResponse(BaseModel):
     tools_used: list[str] = Field(description="Tools called this turn, in order")
     guard_results: list[GuardResult]
     latency_ms: int
+    cache_hit: bool = Field(default=False, description="True if the answer was replayed from the semantic cache (also the X-Cache header)")

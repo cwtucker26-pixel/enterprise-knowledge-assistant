@@ -9,6 +9,7 @@ from contextlib import ExitStack
 
 from langfuse import Langfuse, propagate_attributes
 from langfuse.langchain import CallbackHandler
+from langfuse.span_filter import is_default_export_span
 
 from src.guardrails.output import redact_secrets
 from src.guardrails.pii import mask_pii
@@ -37,9 +38,18 @@ def mask_langfuse(data=None, **_):
         return _scrub(repr(data))
 
 
+def export_span(span) -> bool:
+    """Langfuse's default export filter, minus the Anthropic SDK's own spans. Every model call is recorded twice,
+    by the LangChain handler (`ChatAnthropic`) and by the Anthropic SDK instrumentation (`anthropic.messages.create`,
+    nested under it), and Langfuse sums both, so trace token and cost totals came out at about double the real
+    figures. The LangChain-level generation carries the same usage, so only that one is kept."""
+    scope = getattr(span.instrumentation_scope, "name", "") or ""
+    return is_default_export_span(span) and not scope.startswith("com.anthropic")
+
+
 def init_langfuse(settings) -> Langfuse:
     return Langfuse(public_key=settings.langfuse_public_key, secret_key=settings.langfuse_secret_key,
-                    host=settings.langfuse_host, mask=mask_langfuse)
+                    host=settings.langfuse_host, mask=mask_langfuse, should_export_span=export_span)
 
 
 def _short(value) -> str:
@@ -90,6 +100,8 @@ class ChatTrace:
             tags.append("warned")
         if response.rewritten_query:
             tags.append("follow-up")
+        if response.cache_hit:
+            tags.append("cache-hit")
         tags += [f"tool:{name}" for name in dict.fromkeys(response.tools_used)]
         flagged = [g["guard"] for g in guards if not g["passed"] or g["action"] in ("flagged", "warned")]
         output = {"answer": response.answer, "citations": response.citations, "blocked": response.blocked,

@@ -127,7 +127,8 @@ def build_graph_facts(edges: list[dict], linked_keys: set, expanded: dict, subje
 
 class HybridRetriever:
     def __init__(self):
-        self.store = get_vector_store(get_embeddings())
+        self.embeddings = get_embeddings()  # shared with the semantic answer cache
+        self.store = get_vector_store(self.embeddings)
         self.driver = graph.make_driver()
         self.reranker = Reranker()
         self.patterns = build_patterns(graph.entity_names(self.driver))

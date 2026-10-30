@@ -1,0 +1,2400 @@
+{
+ "date": "2026-10-30",
+ "cache_config": {
+  "enabled": true,
+  "entries": 0,
+  "hits": 0,
+  "misses": 0
+ },
+ "cold": [
+  {
+   "status": 200,
+   "seconds": 8.430713834008202,
+   "x_cache": "MISS",
+   "trace_id": "ad7479ab8e6d6635a3888f1e0d6ae77f",
+   "answer": "The Billing team owns Payment-Service, and Priya Sharma leads that team and is the system owner.\n\n- The FAQ says Payment-Service is owned by the Billing team, led by Priya Sharma. For escalations, contact Priya directly or page the Billing on-call through PagerDuty [FAQ-01#0].\n- The technical manual lists the owner team as Billing and the system owner as Priya Sharma [manual_payment_service#0].\n- The knowledge graph agrees. It shows Billing owning Payment-Service and Priya Sharma as its system owner [graph:manual_payment_service].",
+   "session_id": "7fb8a5cb-964b-47d0-bd61-c34b481c10ac",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "FAQ-01#0",
+    "manual_payment_service#0",
+    "graph:manual_payment_service"
+   ],
+   "sources": [
+    {
+     "chunk_id": "FAQ-01#0",
+     "doc_id": "FAQ-01"
+    },
+    {
+     "chunk_id": "manual_payment_service#0",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "INC-204#0",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "SOP-17#0",
+     "doc_id": "SOP-17"
+    },
+    {
+     "chunk_id": "INC-204#5",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "INC-202#0",
+     "doc_id": "INC-202"
+    },
+    {
+     "chunk_id": "FAQ-10#0",
+     "doc_id": "FAQ-10"
+    },
+    {
+     "chunk_id": "INC-202#5",
+     "doc_id": "INC-202"
+    }
+   ],
+   "tools_used": [],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "The user is asking an ordinary business question about which team or person owns the Payment-Service system."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    }
+   ],
+   "latency_ms": 8150,
+   "cache_hit": false,
+   "kind": "single-hop",
+   "question": "Who owns Payment-Service?",
+   "correct": true,
+   "cost_by_model": {
+    "claude-haiku-5-5": {
+     "calls": 2,
+     "input": 5209,
+     "output": 726,
+     "usd": 0.0008839
+    },
+    "claude-sonnet-5-5": {
+     "calls": 1,
+     "input": 3806,
+     "output": 200,
+     "usd": 0.009612
+    }
+   },
+   "node_seconds": {
+    "output_guard": 2.32,
+    "agent": 2.47,
+    "retrieve": 1.3,
+    "contextualize": 0.0,
+    "input_guard": 1.224
+   },
+   "n_observations": 21,
+   "usd": 0.0104959
+  },
+  {
+   "status": 200,
+   "seconds": 5.678650458998163,
+   "x_cache": "MISS",
+   "trace_id": "da7c42925818efa7057d84b2644b64d9",
+   "answer": "Transaction records are retained for 7 years. This is a regulatory requirement under POL-002, the Data Retention Policy [POL-002#1][FAQ-05#0].\n\nCustomer PII is handled differently. It is anonymised after 90 days under GDPR requirements [FAQ-05#0][POL-002#1].\n\nFor data queries, contact Chen Wei in Data Engineering, who owns the policy [FAQ-05#0][POL-002#0].",
+   "session_id": "af8bd5b7-bc7c-4aff-89ed-fa3d84ee3b4f",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "POL-002#1",
+    "FAQ-05#0",
+    "POL-002#0"
+   ],
+   "sources": [
+    {
+     "chunk_id": "FAQ-05#0",
+     "doc_id": "FAQ-05"
+    },
+    {
+     "chunk_id": "POL-002#1",
+     "doc_id": "POL-002"
+    },
+    {
+     "chunk_id": "POL-002#0",
+     "doc_id": "POL-002"
+    },
+    {
+     "chunk_id": "SOP-02#2",
+     "doc_id": "SOP-02"
+    },
+    {
+     "chunk_id": "INC-203#0",
+     "doc_id": "INC-203"
+    },
+    {
+     "chunk_id": "INC-202#2",
+     "doc_id": "INC-202"
+    },
+    {
+     "chunk_id": "INC-203#5",
+     "doc_id": "INC-203"
+    },
+    {
+     "chunk_id": "INC-204#2",
+     "doc_id": "INC-204"
+    }
+   ],
+   "tools_used": [],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "The user is asking an ordinary business question about the data retention policy for transaction records."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    }
+   ],
+   "latency_ms": 5404,
+   "cache_hit": false,
+   "kind": "single-hop",
+   "question": "What is the data retention period for transaction records?",
+   "correct": true,
+   "cost_by_model": {
+    "claude-haiku-5-5": {
+     "calls": 2,
+     "input": 4292,
+     "output": 497,
+     "usd": 0.0006777000000000002
+    },
+    "claude-sonnet-5-5": {
+     "calls": 1,
+     "input": 2936,
+     "output": 151,
+     "usd": 0.007382
+    }
+   },
+   "node_seconds": {
+    "output_guard": 1.848,
+    "agent": 2.177,
+    "retrieve": 0.177,
+    "contextualize": 0.001,
+    "input_guard": 1.175
+   },
+   "n_observations": 21,
+   "usd": 0.0080597
+  },
+  {
+   "status": 200,
+   "seconds": 15.349289457997656,
+   "x_cache": "MISS",
+   "trace_id": "6709de5d7c414278b9f7ba35899de054",
+   "answer": "Four systems depend on Auth-DB, according to the technical manuals, which are authoritative.\n\n| System | System owner | Owning team |\n|---|---|---|\n| APIGateway | Natalia Voss [graph:manual_apigateway] | Security [graph:manual_apigateway] |\n| DataWarehouse | Chen Wei [graph:manual_datawarehouse] | Data Engineering [graph:manual_datawarehouse] |\n| Payment-Service | Priya Sharma [graph:manual_payment_service] | Billing [graph:manual_payment_service] |\n| UserProfile-API | Amara Okafor [graph:manual_userprofile_api] | Customer Success [graph:manual_userprofile_api] |\n\n- **Dependency evidence:** Each manual says the system relies on Auth-DB for authentication and session validation. An Auth-DB outage makes APIGateway, DataWarehouse and Payment-Service return 503 errors [manual_apigateway#1][manual_datawarehouse#1][manual_payment_service#1]. For UserProfile-API, I only have the graph fact that it depends on Auth-DB [graph:manual_userprofile_api].\n- **Auth-DB's own owner:** Auth-DB is owned by the Infrastructure team, and its system owner is Marcus Lee [manual_auth_db#0].\n\n**Discrepancies**\n- **FAQ-03 is incomplete:** It lists only Payment-Service, UserProfile-API and APIGateway, and leaves out DataWarehouse [FAQ-03#0]. The DataWarehouse manual and graph both show that dependency [manual_datawarehouse#1][graph:manual_datawarehouse].\n- **Incident reports reverse the direction:** INC-205 says Auth-DB depends on APIGateway, and INC-204 says Auth-DB depends on Payment-Service. Neither is authoritative [graph:INC-205][graph:INC-204]. The manuals say the opposite, so I'm treating the manuals as correct.\n- **The Auth-DB manual is inconsistent:** Its architecture diagram shows Auth-DB feeding Payment-Service, and it says \"Auth-DB depends on Auth-DB\" [manual_auth_db#1]. This conflicts with the other manuals, which say Payment-Service depends on Auth-DB.",
+   "session_id": "7c1d827a-99f8-4d92-86c6-6bb6e48a192d",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "graph:manual_apigateway",
+    "graph:manual_datawarehouse",
+    "graph:manual_payment_service",
+    "graph:manual_userprofile_api",
+    "manual_apigateway#1",
+    "manual_datawarehouse#1",
+    "manual_payment_service#1",
+    "manual_auth_db#0",
+    "FAQ-03#0",
+    "graph:INC-205",
+    "graph:INC-204",
+    "manual_auth_db#1"
+   ],
+   "sources": [
+    {
+     "chunk_id": "FAQ-03#0",
+     "doc_id": "FAQ-03"
+    },
+    {
+     "chunk_id": "POL-001#1",
+     "doc_id": "POL-001"
+    },
+    {
+     "chunk_id": "manual_auth_db#0",
+     "doc_id": "manual_auth_db"
+    },
+    {
+     "chunk_id": "manual_auth_db#1",
+     "doc_id": "manual_auth_db"
+    },
+    {
+     "chunk_id": "manual_datawarehouse#1",
+     "doc_id": "manual_datawarehouse"
+    },
+    {
+     "chunk_id": "INC-201#0",
+     "doc_id": "INC-201"
+    },
+    {
+     "chunk_id": "manual_payment_service#1",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "manual_apigateway#1",
+     "doc_id": "manual_apigateway"
+    }
+   ],
+   "tools_used": [],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "The user asks an ordinary business question about which systems depend on Auth-DB and their owners, with no attempt to override instructions or extract secrets."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    }
+   ],
+   "latency_ms": 14967,
+   "cache_hit": false,
+   "kind": "multi-hop",
+   "question": "Which systems depend on Auth-DB, and who owns each?",
+   "correct": true,
+   "cost_by_model": {
+    "claude-haiku-5-5": {
+     "calls": 2,
+     "input": 5853,
+     "output": 1152,
+     "usd": 0.0011613
+    },
+    "claude-sonnet-5-5": {
+     "calls": 1,
+     "input": 3851,
+     "output": 1001,
+     "usd": 0.017712
+    }
+   },
+   "node_seconds": {
+    "output_guard": 6.175,
+    "agent": 6.538,
+    "retrieve": 1.319,
+    "contextualize": 0.0,
+    "input_guard": 0.907
+   },
+   "n_observations": 21,
+   "usd": 0.0188733
+  },
+  {
+   "status": 200,
+   "seconds": 11.957393666001735,
+   "x_cache": "MISS",
+   "trace_id": "7400d151601669b8dfe0f4cfa35fbd51",
+   "answer": "**No. Auth-DB does not depend on Payment-Service, according to the authoritative sources.** The dependency runs the other way, and one incident report conflicts with this.\n\n**Authoritative sources**\n- The technical manual for Payment-Service says Payment-Service depends on Auth-DB for all authentication and session validation. [manual_payment_service#1]\n- The knowledge graph lists \"Payment-Service DEPENDS_ON Auth-DB\" as authoritative, from the manual. [graph:manual_payment_service]\n- The graph also lists APIGateway, DataWarehouse and UserProfile-API as depending on Auth-DB, and all of these come from technical manuals. [graph:manual_apigateway] [graph:manual_datawarehouse] [graph:manual_userprofile_api]\n- FAQ-03 describes Auth-DB as a foundational service. It names Payment-Service, UserProfile-API and APIGateway as the systems that depend on it. [FAQ-03#0]\n- FAQ-10 says Payment-Service has a hard dependency on Auth-DB. [FAQ-10#0]\n- SOP-17 treats Auth-DB as the primary dependency of Payment-Service. If Auth-DB is saturated, it tells you to page Infrastructure. [SOP-17#2]\n\n**Conflicting sources**\n- INC-204 says Auth-DB has a hard dependency on Payment-Service. It also says Auth-DB depends on Payment-Service for critical operations. [INC-204#3] [INC-204#1]\n- The graph records this as \"Auth-DB DEPENDS_ON Payment-Service\", marked NOT authoritative because it comes from an incident report. [graph:INC-204]\n- INC-204 contradicts itself. Its summary says the cause was Auth-DB hitting connection limits [INC-204#1], but its root-cause section says Payment-Service saturated its connection pool [INC-204#3]. FAQ-10 describes the same incident as Auth-DB hitting its pool limit and causing Payment-Service to fail. [FAQ-10#0]\n\n**Another oddity**\n- The Auth-DB manual's architecture section is garbled. It says Auth-DB depends on Auth-DB and shows Payment-Service downstream of Auth-DB. [manual_auth_db#1] This is not a reliable source for a dependency on Payment-Service.\n\nTechnical manuals are authoritative for system dependencies, so the INC-204 claim should be treated as a conflicting incident report.",
+   "session_id": "261fee69-598f-48e3-8e44-b511910a430f",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "manual_payment_service#1",
+    "graph:manual_payment_service",
+    "graph:manual_apigateway",
+    "graph:manual_datawarehouse",
+    "graph:manual_userprofile_api",
+    "FAQ-03#0",
+    "FAQ-10#0",
+    "SOP-17#2",
+    "INC-204#3",
+    "INC-204#1",
+    "graph:INC-204",
+    "manual_auth_db#1"
+   ],
+   "sources": [
+    {
+     "chunk_id": "manual_payment_service#1",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "FAQ-03#0",
+     "doc_id": "FAQ-03"
+    },
+    {
+     "chunk_id": "manual_auth_db#1",
+     "doc_id": "manual_auth_db"
+    },
+    {
+     "chunk_id": "INC-204#3",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "INC-204#1",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "manual_apigateway#1",
+     "doc_id": "manual_apigateway"
+    },
+    {
+     "chunk_id": "FAQ-10#0",
+     "doc_id": "FAQ-10"
+    },
+    {
+     "chunk_id": "SOP-17#2",
+     "doc_id": "SOP-17"
+    }
+   ],
+   "tools_used": [],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "This is an ordinary business question asking about a dependency between two internal systems, with no attempt to override instructions, extract secrets, or smuggle commands."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    }
+   ],
+   "latency_ms": 11689,
+   "cache_hit": false,
+   "kind": "conflict",
+   "question": "Does Auth-DB depend on Payment-Service?",
+   "correct": true,
+   "cost_by_model": {
+    "claude-haiku-5-5": {
+     "calls": 2,
+     "input": 5893,
+     "output": 928,
+     "usd": 0.0010533
+    },
+    "claude-sonnet-5-5": {
+     "calls": 1,
+     "input": 3841,
+     "output": 842,
+     "usd": 0.016102
+    }
+   },
+   "node_seconds": {
+    "output_guard": 2.856,
+    "agent": 5.837,
+    "contextualize": 0.0,
+    "retrieve": 1.815,
+    "input_guard": 1.144
+   },
+   "n_observations": 21,
+   "usd": 0.017155300000000002
+  },
+  {
+   "status": 200,
+   "seconds": 6.554447375005111,
+   "x_cache": "MISS",
+   "trace_id": "2a3008af9d3686036ff8c536b8c30cc9",
+   "answer": "The database has 152 completed transactions. Their total amount is $148,409.38 USD [sql_query].",
+   "session_id": "f6b435f9-f942-4fc7-b323-8ba60b46acda",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "sql_query"
+   ],
+   "sources": [
+    {
+     "chunk_id": "FAQ-05#0",
+     "doc_id": "FAQ-05"
+    },
+    {
+     "chunk_id": "POL-002#1",
+     "doc_id": "POL-002"
+    },
+    {
+     "chunk_id": "manual_payment_service#1",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "SOP-17#2",
+     "doc_id": "SOP-17"
+    },
+    {
+     "chunk_id": "INC-204#2",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "manual_payment_service#0",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "manual_apigateway#1",
+     "doc_id": "manual_apigateway"
+    },
+    {
+     "chunk_id": "FAQ-10#0",
+     "doc_id": "FAQ-10"
+    }
+   ],
+   "tools_used": [
+    "sql_query"
+   ],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "The input is an ordinary business data question asking for a count and total of completed transactions, with no injection or misuse attempt."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    }
+   ],
+   "latency_ms": 6423,
+   "cache_hit": false,
+   "kind": "sql",
+   "question": "How many completed transactions are there, and what is their total amount in USD?",
+   "correct": true,
+   "cost_by_model": {
+    "claude-haiku-5-5": {
+     "calls": 2,
+     "input": 4315,
+     "output": 334,
+     "usd": 0.0005985000000000001
+    },
+    "claude-sonnet-5-5": {
+     "calls": 2,
+     "input": 6214,
+     "output": 125,
+     "usd": 0.013678
+    }
+   },
+   "node_seconds": {
+    "output_guard": 1.538,
+    "agent": 3.698,
+    "tools": 0.015,
+    "retrieve": 0.095,
+    "contextualize": 0.001,
+    "input_guard": 1.052
+   },
+   "n_observations": 27,
+   "usd": 0.0142765
+  }
+ ],
+ "cached": [
+  {
+   "status": 200,
+   "seconds": 0.034141833006287925,
+   "x_cache": "HIT",
+   "trace_id": "1f61ee1833fa395e18a5d9b82d6a74a3",
+   "answer": "The Billing team owns Payment-Service, and Priya Sharma leads that team and is the system owner.\n\n- The FAQ says Payment-Service is owned by the Billing team, led by Priya Sharma. For escalations, contact Priya directly or page the Billing on-call through PagerDuty [FAQ-01#0].\n- The technical manual lists the owner team as Billing and the system owner as Priya Sharma [manual_payment_service#0].\n- The knowledge graph agrees. It shows Billing owning Payment-Service and Priya Sharma as its system owner [graph:manual_payment_service].",
+   "session_id": "b1d00341-6099-4671-acbc-931c3a1b3c1b",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "FAQ-01#0",
+    "manual_payment_service#0",
+    "graph:manual_payment_service"
+   ],
+   "sources": [
+    {
+     "chunk_id": "FAQ-01#0",
+     "doc_id": "FAQ-01"
+    },
+    {
+     "chunk_id": "manual_payment_service#0",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "INC-204#0",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "SOP-17#0",
+     "doc_id": "SOP-17"
+    },
+    {
+     "chunk_id": "INC-204#5",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "INC-202#0",
+     "doc_id": "INC-202"
+    },
+    {
+     "chunk_id": "FAQ-10#0",
+     "doc_id": "FAQ-10"
+    },
+    {
+     "chunk_id": "INC-202#5",
+     "doc_id": "INC-202"
+    }
+   ],
+   "tools_used": [],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "The user is asking an ordinary business question about which team or person owns the Payment-Service system."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "semantic_cache",
+     "passed": true,
+     "action": "hit",
+     "reason": "similarity 1.000 to a cached question"
+    }
+   ],
+   "latency_ms": 17,
+   "cache_hit": true,
+   "kind": "single-hop",
+   "question": "Who owns Payment-Service?",
+   "same_answer": true,
+   "expected_hit": true
+  },
+  {
+   "status": 200,
+   "seconds": 0.024934499990195036,
+   "x_cache": "HIT",
+   "trace_id": "42a5d61b3b54179a3055a678c57d8f4a",
+   "answer": "Transaction records are retained for 7 years. This is a regulatory requirement under POL-002, the Data Retention Policy [POL-002#1][FAQ-05#0].\n\nCustomer PII is handled differently. It is anonymised after 90 days under GDPR requirements [FAQ-05#0][POL-002#1].\n\nFor data queries, contact Chen Wei in Data Engineering, who owns the policy [FAQ-05#0][POL-002#0].",
+   "session_id": "730fcabd-45ab-4ba9-8e4b-ac540e4b787a",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "POL-002#1",
+    "FAQ-05#0",
+    "POL-002#0"
+   ],
+   "sources": [
+    {
+     "chunk_id": "FAQ-05#0",
+     "doc_id": "FAQ-05"
+    },
+    {
+     "chunk_id": "POL-002#1",
+     "doc_id": "POL-002"
+    },
+    {
+     "chunk_id": "POL-002#0",
+     "doc_id": "POL-002"
+    },
+    {
+     "chunk_id": "SOP-02#2",
+     "doc_id": "SOP-02"
+    },
+    {
+     "chunk_id": "INC-203#0",
+     "doc_id": "INC-203"
+    },
+    {
+     "chunk_id": "INC-202#2",
+     "doc_id": "INC-202"
+    },
+    {
+     "chunk_id": "INC-203#5",
+     "doc_id": "INC-203"
+    },
+    {
+     "chunk_id": "INC-204#2",
+     "doc_id": "INC-204"
+    }
+   ],
+   "tools_used": [],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "The user is asking an ordinary business question about the data retention policy for transaction records."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "semantic_cache",
+     "passed": true,
+     "action": "hit",
+     "reason": "similarity 1.000 to a cached question"
+    }
+   ],
+   "latency_ms": 10,
+   "cache_hit": true,
+   "kind": "single-hop",
+   "question": "What is the data retention period for transaction records?",
+   "same_answer": true,
+   "expected_hit": true
+  },
+  {
+   "status": 200,
+   "seconds": 0.026091916995937936,
+   "x_cache": "HIT",
+   "trace_id": "3cc17a0405860f2fabb8c33a6b56ca5a",
+   "answer": "Four systems depend on Auth-DB, according to the technical manuals, which are authoritative.\n\n| System | System owner | Owning team |\n|---|---|---|\n| APIGateway | Natalia Voss [graph:manual_apigateway] | Security [graph:manual_apigateway] |\n| DataWarehouse | Chen Wei [graph:manual_datawarehouse] | Data Engineering [graph:manual_datawarehouse] |\n| Payment-Service | Priya Sharma [graph:manual_payment_service] | Billing [graph:manual_payment_service] |\n| UserProfile-API | Amara Okafor [graph:manual_userprofile_api] | Customer Success [graph:manual_userprofile_api] |\n\n- **Dependency evidence:** Each manual says the system relies on Auth-DB for authentication and session validation. An Auth-DB outage makes APIGateway, DataWarehouse and Payment-Service return 503 errors [manual_apigateway#1][manual_datawarehouse#1][manual_payment_service#1]. For UserProfile-API, I only have the graph fact that it depends on Auth-DB [graph:manual_userprofile_api].\n- **Auth-DB's own owner:** Auth-DB is owned by the Infrastructure team, and its system owner is Marcus Lee [manual_auth_db#0].\n\n**Discrepancies**\n- **FAQ-03 is incomplete:** It lists only Payment-Service, UserProfile-API and APIGateway, and leaves out DataWarehouse [FAQ-03#0]. The DataWarehouse manual and graph both show that dependency [manual_datawarehouse#1][graph:manual_datawarehouse].\n- **Incident reports reverse the direction:** INC-205 says Auth-DB depends on APIGateway, and INC-204 says Auth-DB depends on Payment-Service. Neither is authoritative [graph:INC-205][graph:INC-204]. The manuals say the opposite, so I'm treating the manuals as correct.\n- **The Auth-DB manual is inconsistent:** Its architecture diagram shows Auth-DB feeding Payment-Service, and it says \"Auth-DB depends on Auth-DB\" [manual_auth_db#1]. This conflicts with the other manuals, which say Payment-Service depends on Auth-DB.",
+   "session_id": "62239edb-9fcc-47d5-a027-cc30d9d512c5",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "graph:manual_apigateway",
+    "graph:manual_datawarehouse",
+    "graph:manual_payment_service",
+    "graph:manual_userprofile_api",
+    "manual_apigateway#1",
+    "manual_datawarehouse#1",
+    "manual_payment_service#1",
+    "manual_auth_db#0",
+    "FAQ-03#0",
+    "graph:INC-205",
+    "graph:INC-204",
+    "manual_auth_db#1"
+   ],
+   "sources": [
+    {
+     "chunk_id": "FAQ-03#0",
+     "doc_id": "FAQ-03"
+    },
+    {
+     "chunk_id": "POL-001#1",
+     "doc_id": "POL-001"
+    },
+    {
+     "chunk_id": "manual_auth_db#0",
+     "doc_id": "manual_auth_db"
+    },
+    {
+     "chunk_id": "manual_auth_db#1",
+     "doc_id": "manual_auth_db"
+    },
+    {
+     "chunk_id": "manual_datawarehouse#1",
+     "doc_id": "manual_datawarehouse"
+    },
+    {
+     "chunk_id": "INC-201#0",
+     "doc_id": "INC-201"
+    },
+    {
+     "chunk_id": "manual_payment_service#1",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "manual_apigateway#1",
+     "doc_id": "manual_apigateway"
+    }
+   ],
+   "tools_used": [],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "The user asks an ordinary business question about which systems depend on Auth-DB and their owners, with no attempt to override instructions or extract secrets."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "semantic_cache",
+     "passed": true,
+     "action": "hit",
+     "reason": "similarity 1.000 to a cached question"
+    }
+   ],
+   "latency_ms": 11,
+   "cache_hit": true,
+   "kind": "multi-hop",
+   "question": "Which systems depend on Auth-DB, and who owns each?",
+   "same_answer": true,
+   "expected_hit": true
+  },
+  {
+   "status": 200,
+   "seconds": 0.02591270799166523,
+   "x_cache": "HIT",
+   "trace_id": "e8aabab14f2152a58244a79d3b0cbcf5",
+   "answer": "**No. Auth-DB does not depend on Payment-Service, according to the authoritative sources.** The dependency runs the other way, and one incident report conflicts with this.\n\n**Authoritative sources**\n- The technical manual for Payment-Service says Payment-Service depends on Auth-DB for all authentication and session validation. [manual_payment_service#1]\n- The knowledge graph lists \"Payment-Service DEPENDS_ON Auth-DB\" as authoritative, from the manual. [graph:manual_payment_service]\n- The graph also lists APIGateway, DataWarehouse and UserProfile-API as depending on Auth-DB, and all of these come from technical manuals. [graph:manual_apigateway] [graph:manual_datawarehouse] [graph:manual_userprofile_api]\n- FAQ-03 describes Auth-DB as a foundational service. It names Payment-Service, UserProfile-API and APIGateway as the systems that depend on it. [FAQ-03#0]\n- FAQ-10 says Payment-Service has a hard dependency on Auth-DB. [FAQ-10#0]\n- SOP-17 treats Auth-DB as the primary dependency of Payment-Service. If Auth-DB is saturated, it tells you to page Infrastructure. [SOP-17#2]\n\n**Conflicting sources**\n- INC-204 says Auth-DB has a hard dependency on Payment-Service. It also says Auth-DB depends on Payment-Service for critical operations. [INC-204#3] [INC-204#1]\n- The graph records this as \"Auth-DB DEPENDS_ON Payment-Service\", marked NOT authoritative because it comes from an incident report. [graph:INC-204]\n- INC-204 contradicts itself. Its summary says the cause was Auth-DB hitting connection limits [INC-204#1], but its root-cause section says Payment-Service saturated its connection pool [INC-204#3]. FAQ-10 describes the same incident as Auth-DB hitting its pool limit and causing Payment-Service to fail. [FAQ-10#0]\n\n**Another oddity**\n- The Auth-DB manual's architecture section is garbled. It says Auth-DB depends on Auth-DB and shows Payment-Service downstream of Auth-DB. [manual_auth_db#1] This is not a reliable source for a dependency on Payment-Service.\n\nTechnical manuals are authoritative for system dependencies, so the INC-204 claim should be treated as a conflicting incident report.",
+   "session_id": "e3b484c7-225d-4575-83d4-d41fc308aa0e",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "manual_payment_service#1",
+    "graph:manual_payment_service",
+    "graph:manual_apigateway",
+    "graph:manual_datawarehouse",
+    "graph:manual_userprofile_api",
+    "FAQ-03#0",
+    "FAQ-10#0",
+    "SOP-17#2",
+    "INC-204#3",
+    "INC-204#1",
+    "graph:INC-204",
+    "manual_auth_db#1"
+   ],
+   "sources": [
+    {
+     "chunk_id": "manual_payment_service#1",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "FAQ-03#0",
+     "doc_id": "FAQ-03"
+    },
+    {
+     "chunk_id": "manual_auth_db#1",
+     "doc_id": "manual_auth_db"
+    },
+    {
+     "chunk_id": "INC-204#3",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "INC-204#1",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "manual_apigateway#1",
+     "doc_id": "manual_apigateway"
+    },
+    {
+     "chunk_id": "FAQ-10#0",
+     "doc_id": "FAQ-10"
+    },
+    {
+     "chunk_id": "SOP-17#2",
+     "doc_id": "SOP-17"
+    }
+   ],
+   "tools_used": [],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "This is an ordinary business question asking about a dependency between two internal systems, with no attempt to override instructions, extract secrets, or smuggle commands."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "semantic_cache",
+     "passed": true,
+     "action": "hit",
+     "reason": "similarity 1.000 to a cached question"
+    }
+   ],
+   "latency_ms": 10,
+   "cache_hit": true,
+   "kind": "conflict",
+   "question": "Does Auth-DB depend on Payment-Service?",
+   "same_answer": true,
+   "expected_hit": true
+  },
+  {
+   "status": 200,
+   "seconds": 0.03115408300072886,
+   "x_cache": "HIT",
+   "trace_id": "50e1a18d98a733b6a485f06f40624817",
+   "answer": "The database has 152 completed transactions. Their total amount is $148,409.38 USD [sql_query].",
+   "session_id": "4c356e1f-81a9-4380-ba16-7a024beafeab",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "sql_query"
+   ],
+   "sources": [
+    {
+     "chunk_id": "FAQ-05#0",
+     "doc_id": "FAQ-05"
+    },
+    {
+     "chunk_id": "POL-002#1",
+     "doc_id": "POL-002"
+    },
+    {
+     "chunk_id": "manual_payment_service#1",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "SOP-17#2",
+     "doc_id": "SOP-17"
+    },
+    {
+     "chunk_id": "INC-204#2",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "manual_payment_service#0",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "manual_apigateway#1",
+     "doc_id": "manual_apigateway"
+    },
+    {
+     "chunk_id": "FAQ-10#0",
+     "doc_id": "FAQ-10"
+    }
+   ],
+   "tools_used": [
+    "sql_query"
+   ],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "The input is an ordinary business data question asking for a count and total of completed transactions, with no injection or misuse attempt."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "semantic_cache",
+     "passed": true,
+     "action": "hit",
+     "reason": "similarity 1.000 to a cached question"
+    }
+   ],
+   "latency_ms": 12,
+   "cache_hit": true,
+   "kind": "sql",
+   "question": "How many completed transactions are there, and what is their total amount in USD?",
+   "same_answer": true,
+   "expected_hit": true
+  }
+ ],
+ "probes": [
+  {
+   "status": 200,
+   "seconds": 0.05233991700515617,
+   "x_cache": "HIT",
+   "trace_id": "4cbe24e9022d19f7a2f23921fbf99e6e",
+   "answer": "The Billing team owns Payment-Service, and Priya Sharma leads that team and is the system owner.\n\n- The FAQ says Payment-Service is owned by the Billing team, led by Priya Sharma. For escalations, contact Priya directly or page the Billing on-call through PagerDuty [FAQ-01#0].\n- The technical manual lists the owner team as Billing and the system owner as Priya Sharma [manual_payment_service#0].\n- The knowledge graph agrees. It shows Billing owning Payment-Service and Priya Sharma as its system owner [graph:manual_payment_service].",
+   "session_id": "a1bf7f90-c702-47de-b019-71b2e32f9e52",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "FAQ-01#0",
+    "manual_payment_service#0",
+    "graph:manual_payment_service"
+   ],
+   "sources": [
+    {
+     "chunk_id": "FAQ-01#0",
+     "doc_id": "FAQ-01"
+    },
+    {
+     "chunk_id": "manual_payment_service#0",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "INC-204#0",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "SOP-17#0",
+     "doc_id": "SOP-17"
+    },
+    {
+     "chunk_id": "INC-204#5",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "INC-202#0",
+     "doc_id": "INC-202"
+    },
+    {
+     "chunk_id": "FAQ-10#0",
+     "doc_id": "FAQ-10"
+    },
+    {
+     "chunk_id": "INC-202#5",
+     "doc_id": "INC-202"
+    }
+   ],
+   "tools_used": [],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "The user is asking an ordinary business question about which team or person owns the Payment-Service system."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "semantic_cache",
+     "passed": true,
+     "action": "hit",
+     "reason": "similarity 0.973 to a cached question"
+    }
+   ],
+   "latency_ms": 38,
+   "cache_hit": true,
+   "label": "lower-case, no punctuation variant",
+   "question": "who owns payment service",
+   "expect": "HIT",
+   "ok": true
+  },
+  {
+   "status": 200,
+   "seconds": 0.03161216599983163,
+   "x_cache": "HIT",
+   "trace_id": "86ddccb6c3a9caa4e54d42b91208f231",
+   "answer": "The Billing team owns Payment-Service, and Priya Sharma leads that team and is the system owner.\n\n- The FAQ says Payment-Service is owned by the Billing team, led by Priya Sharma. For escalations, contact Priya directly or page the Billing on-call through PagerDuty [FAQ-01#0].\n- The technical manual lists the owner team as Billing and the system owner as Priya Sharma [manual_payment_service#0].\n- The knowledge graph agrees. It shows Billing owning Payment-Service and Priya Sharma as its system owner [graph:manual_payment_service].",
+   "session_id": "3180fd10-8a50-46d3-929b-6c128313f548",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "FAQ-01#0",
+    "manual_payment_service#0",
+    "graph:manual_payment_service"
+   ],
+   "sources": [
+    {
+     "chunk_id": "FAQ-01#0",
+     "doc_id": "FAQ-01"
+    },
+    {
+     "chunk_id": "manual_payment_service#0",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "INC-204#0",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "SOP-17#0",
+     "doc_id": "SOP-17"
+    },
+    {
+     "chunk_id": "INC-204#5",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "INC-202#0",
+     "doc_id": "INC-202"
+    },
+    {
+     "chunk_id": "FAQ-10#0",
+     "doc_id": "FAQ-10"
+    },
+    {
+     "chunk_id": "INC-202#5",
+     "doc_id": "INC-202"
+    }
+   ],
+   "tools_used": [],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "The user is asking an ordinary business question about which team or person owns the Payment-Service system."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "semantic_cache",
+     "passed": true,
+     "action": "hit",
+     "reason": "similarity 0.991 to a cached question"
+    }
+   ],
+   "latency_ms": 17,
+   "cache_hit": true,
+   "label": "no question mark",
+   "question": "Who owns Payment-Service",
+   "expect": "HIT",
+   "ok": true
+  },
+  {
+   "status": 200,
+   "seconds": 12.030659416006529,
+   "x_cache": "MISS",
+   "trace_id": "0ba1f6ed5abe580f4117b24f8994bbfd",
+   "answer": "Yes. Payment-Service depends on Auth-DB.\n\n- The knowledge graph lists \"Payment-Service DEPENDS_ON Auth-DB\" from the Payment-Service technical manual, which is authoritative [graph:manual_payment_service].\n- The manual says Payment-Service relies on Auth-DB for all authentication and session validation. An Auth-DB outage makes Payment-Service return 503 errors to callers [manual_payment_service#1].\n- FAQ-03 lists Payment-Service among the systems that depend on Auth-DB [FAQ-03#0].\n- FAQ-10 calls it a hard dependency. In the March 2026 incident (INC-204), Auth-DB hit its connection pool limit and Payment-Service failed [FAQ-10#0].\n- The SOP-17 restoration procedure treats Auth-DB as Payment-Service's primary dependency [SOP-17#2].\n\n**Conflicting incident report:** INC-204 says the reverse. It states that Auth-DB depends on Payment-Service and that Payment-Service saturating its connection pool caused Auth-DB to fail [INC-204#1][INC-204#3]. The graph marks this as \"NOT authoritative (incident report)\" [graph:INC-204]. The technical manual is authoritative for system dependencies, so the direction is Payment-Service \u2192 Auth-DB.\n\nThe Auth-DB manual excerpt is also garbled. It says \"Auth-DB depends on Auth-DB\" and shows a diagram with Auth-DB feeding Payment-Service [manual_auth_db#1]. I did not rely on it for this answer.",
+   "session_id": "7613b9e2-077a-4750-95e0-8292b18fe1f6",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "graph:manual_payment_service",
+    "manual_payment_service#1",
+    "FAQ-03#0",
+    "FAQ-10#0",
+    "SOP-17#2",
+    "INC-204#1",
+    "INC-204#3",
+    "graph:INC-204",
+    "manual_auth_db#1"
+   ],
+   "sources": [
+    {
+     "chunk_id": "manual_payment_service#1",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "FAQ-03#0",
+     "doc_id": "FAQ-03"
+    },
+    {
+     "chunk_id": "manual_auth_db#1",
+     "doc_id": "manual_auth_db"
+    },
+    {
+     "chunk_id": "manual_apigateway#1",
+     "doc_id": "manual_apigateway"
+    },
+    {
+     "chunk_id": "INC-204#1",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "FAQ-10#0",
+     "doc_id": "FAQ-10"
+    },
+    {
+     "chunk_id": "INC-204#3",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "SOP-17#2",
+     "doc_id": "SOP-17"
+    }
+   ],
+   "tools_used": [],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "The user asks an ordinary business question about whether one system depends on another, with no attempt to override instructions or extract secrets."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    }
+   ],
+   "latency_ms": 11794,
+   "cache_hit": false,
+   "label": "REVERSED dependency direction (cosine ~0.996 to a cached question)",
+   "question": "Does Payment-Service depend on Auth-DB?",
+   "expect": "MISS",
+   "ok": true
+  },
+  {
+   "status": 200,
+   "seconds": 7.964925625012256,
+   "x_cache": "BYPASS",
+   "trace_id": "7936a82d279b2c8a2fa904fda2b43f17",
+   "answer": "Billing owns Payment-Service, and Priya Sharma leads that team.\n\n- The Billing team owns Payment-Service. Priya Sharma is the team lead, and you can escalate to her directly or page the Billing on-call through PagerDuty [FAQ-01#0].\n- The technical manual lists Billing as the owner team and Priya Sharma as the system owner [manual_payment_service#0].\n- The knowledge graph agrees. It shows Billing OWNS Payment-Service and Priya Sharma as the system owner [graph:manual_payment_service]. It also shows that Priya Sharma manages Billing [graph:users.csv].",
+   "session_id": "58537f14-cf84-4171-89c0-af0c72aad6e2",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "FAQ-01#0",
+    "manual_payment_service#0",
+    "graph:manual_payment_service",
+    "graph:users.csv"
+   ],
+   "sources": [
+    {
+     "chunk_id": "FAQ-01#0",
+     "doc_id": "FAQ-01"
+    },
+    {
+     "chunk_id": "manual_payment_service#0",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "INC-204#0",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "SOP-17#0",
+     "doc_id": "SOP-17"
+    },
+    {
+     "chunk_id": "INC-204#5",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "INC-202#0",
+     "doc_id": "INC-202"
+    },
+    {
+     "chunk_id": "FAQ-10#0",
+     "doc_id": "FAQ-10"
+    },
+    {
+     "chunk_id": "INC-202#5",
+     "doc_id": "INC-202"
+    }
+   ],
+   "tools_used": [],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "The user is asking an ordinary business question about which team or person owns a service."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "skipped",
+     "reason": "judge error, failed open: ValidationError"
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    }
+   ],
+   "latency_ms": 7944,
+   "cache_hit": false,
+   "label": "cache bypassed with use_cache=false",
+   "question": "Who owns Payment-Service?",
+   "expect": "BYPASS",
+   "ok": true
+  },
+  {
+   "status": 200,
+   "seconds": 0.4005514169984963,
+   "x_cache": "HIT",
+   "trace_id": "2ac854645213efae0972a3245e7b0c5b",
+   "answer": "The Billing team owns Payment-Service, and Priya Sharma leads that team and is the system owner.\n\n- The FAQ says Payment-Service is owned by the Billing team, led by Priya Sharma. For escalations, contact Priya directly or page the Billing on-call through PagerDuty [FAQ-01#0].\n- The technical manual lists the owner team as Billing and the system owner as Priya Sharma [manual_payment_service#0].\n- The knowledge graph agrees. It shows Billing owning Payment-Service and Priya Sharma as its system owner [graph:manual_payment_service].",
+   "session_id": "perf-followup-1793387882",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": null,
+   "citations": [
+    "FAQ-01#0",
+    "manual_payment_service#0",
+    "graph:manual_payment_service"
+   ],
+   "sources": [
+    {
+     "chunk_id": "FAQ-01#0",
+     "doc_id": "FAQ-01"
+    },
+    {
+     "chunk_id": "manual_payment_service#0",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "INC-204#0",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "SOP-17#0",
+     "doc_id": "SOP-17"
+    },
+    {
+     "chunk_id": "INC-204#5",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "INC-202#0",
+     "doc_id": "INC-202"
+    },
+    {
+     "chunk_id": "FAQ-10#0",
+     "doc_id": "FAQ-10"
+    },
+    {
+     "chunk_id": "INC-202#5",
+     "doc_id": "INC-202"
+    }
+   ],
+   "tools_used": [],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "The user is asking an ordinary business question about which team or person owns the Payment-Service system."
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "semantic_cache",
+     "passed": true,
+     "action": "hit",
+     "reason": "similarity 1.000 to a cached question"
+    }
+   ],
+   "latency_ms": 370,
+   "cache_hit": true,
+   "label": "first turn answered from the cache",
+   "question": "Who owns Payment-Service?",
+   "expect": "HIT",
+   "ok": true
+  },
+  {
+   "status": 200,
+   "seconds": 26.88083275000099,
+   "x_cache": "SKIP",
+   "trace_id": "32eeff852c062b9ce448d511f601fdfa",
+   "answer": "Payment-Service depends on Auth-DB, according to the technical manual, which is authoritative for dependencies.\n\n- The manual says Payment-Service depends on Auth-DB for all authentication and session validation. If Auth-DB goes down, Payment-Service returns 503 errors to callers [manual_payment_service#1]. The knowledge graph agrees [graph:manual_payment_service].\n- FAQ-03 lists Payment-Service among the systems that depend on Auth-DB [FAQ-03#0]. FAQ-10 calls it a hard dependency [FAQ-10#0].\n\n**Conflicting incident reports:**\n- INC-204 says Auth-DB depends on Payment-Service, which is the reverse direction [INC-204#1]. The graph marks this as not authoritative [graph:INC-204]. The manual's direction, Payment-Service depending on Auth-DB, takes precedence.\n- INC-202 says Payment-Service has a hard dependency on Notification-Service [INC-202#3]. The Payment-Service manual excerpt I have doesn't list Notification-Service as a dependency [manual_payment_service#1]. I can't confirm that dependency from an authoritative source.",
+   "session_id": "perf-followup-1793387882",
+   "blocked": false,
+   "warning": false,
+   "rewritten_query": "What does Payment-Service depend on?",
+   "citations": [
+    "manual_payment_service#1",
+    "graph:manual_payment_service",
+    "FAQ-03#0",
+    "FAQ-10#0",
+    "INC-204#1",
+    "graph:INC-204",
+    "INC-202#3"
+   ],
+   "sources": [
+    {
+     "chunk_id": "manual_payment_service#1",
+     "doc_id": "manual_payment_service"
+    },
+    {
+     "chunk_id": "INC-204#1",
+     "doc_id": "INC-204"
+    },
+    {
+     "chunk_id": "FAQ-03#0",
+     "doc_id": "FAQ-03"
+    },
+    {
+     "chunk_id": "manual_apigateway#1",
+     "doc_id": "manual_apigateway"
+    },
+    {
+     "chunk_id": "FAQ-10#0",
+     "doc_id": "FAQ-10"
+    },
+    {
+     "chunk_id": "INC-202#1",
+     "doc_id": "INC-202"
+    },
+    {
+     "chunk_id": "manual_auth_db#1",
+     "doc_id": "manual_auth_db"
+    },
+    {
+     "chunk_id": "INC-202#3",
+     "doc_id": "INC-202"
+    }
+   ],
+   "tools_used": [],
+   "guard_results": [
+    {
+     "guard": "input_validation",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "input_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_patterns",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "injection_classifier",
+     "passed": true,
+     "action": "none",
+     "reason": "The question is vague but asks about what something depends on, with no attempt to override instructions, extract secrets, or trigger actions."
+    },
+    {
+     "guard": "contextualize",
+     "passed": true,
+     "action": "rewritten",
+     "reason": "What does Payment-Service depend on?"
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": false,
+     "action": "flagged",
+     "reason": "Payment-Service's architecture diagram includes ReportingPortal as a downstream dependency. ([manual_payment_service#1] diagram: \"[Payment-Service] \u2192 [ReportingPortal]\")"
+    },
+    {
+     "guard": "output_filter",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "citations",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "groundedness",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    },
+    {
+     "guard": "output_pii",
+     "passed": true,
+     "action": "none",
+     "reason": ""
+    }
+   ],
+   "latency_ms": 26851,
+   "cache_hit": false,
+   "label": "follow-up after a cache hit is not cached and still works",
+   "question": "What does it depend on?",
+   "expect": "SKIP",
+   "ok": true
+  }
+ ],
+ "concurrency": {
+  "4": {
+   "wall_s": 12.583940917000291,
+   "requests": [
+    {
+     "status": 200,
+     "seconds": 8.285500415993738,
+     "x_cache": "BYPASS",
+     "trace_id": "3d7e30d98ac5aade2a90bc2b38f08fd1",
+     "answer": "The procedure owner of SOP-22 (Security Breach Containment) is Natalia Voss. [SOP-22#0] The knowledge graph shows the same thing. [graph:SOP-22] She also manages the Security team, which owns SOP-22. [graph:users.csv]",
+     "session_id": "d4551170-6351-45e6-9592-3735e8a11208",
+     "blocked": false,
+     "warning": false,
+     "rewritten_query": null,
+     "citations": [
+      "SOP-22#0",
+      "graph:SOP-22",
+      "graph:users.csv"
+     ],
+     "sources": [
+      {
+       "chunk_id": "SOP-22#0",
+       "doc_id": "SOP-22"
+      },
+      {
+       "chunk_id": "SOP-17#0",
+       "doc_id": "SOP-17"
+      },
+      {
+       "chunk_id": "SOP-03#0",
+       "doc_id": "SOP-03"
+      },
+      {
+       "chunk_id": "SOP-01#0",
+       "doc_id": "SOP-01"
+      },
+      {
+       "chunk_id": "SOP-05#0",
+       "doc_id": "SOP-05"
+      },
+      {
+       "chunk_id": "SOP-22#2",
+       "doc_id": "SOP-22"
+      },
+      {
+       "chunk_id": "SOP-04#0",
+       "doc_id": "SOP-04"
+      },
+      {
+       "chunk_id": "SOP-02#0",
+       "doc_id": "SOP-02"
+      }
+     ],
+     "tools_used": [],
+     "guard_results": [
+      {
+       "guard": "input_validation",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "input_pii",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "injection_patterns",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "injection_classifier",
+       "passed": true,
+       "action": "none",
+       "reason": "The user is asking an ordinary business question about who owns a standard operating procedure, with no attempt to override instructions or extract secrets."
+      },
+      {
+       "guard": "output_filter",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "citations",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "groundedness",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "output_pii",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      }
+     ],
+     "latency_ms": 8200,
+     "cache_hit": false,
+     "question": "Who is the procedure owner of SOP-22?",
+     "correct": true
+    },
+    {
+     "status": 200,
+     "seconds": 10.348774375001085,
+     "x_cache": "BYPASS",
+     "trace_id": "bd645ae0dbd7c1460d33951d41fb5411",
+     "answer": "The SOP used to resolve INC-205 is SOP-22, Security Breach Containment. INC-205 lists it as its referenced SOP [INC-205#0].\n\n- **Owning team:** Security owns SOP-22 [SOP-22#0] [graph:SOP-22].\n- **Procedure owner:** Natalia Voss [SOP-22#0] [graph:SOP-22].\n\nNatalia Voss was also the incident lead for INC-205 [INC-205#0]. She manages the Security team [graph:users.csv].",
+     "session_id": "2f54926f-135f-488d-b85d-140e40f1e3e9",
+     "blocked": false,
+     "warning": false,
+     "rewritten_query": null,
+     "citations": [
+      "INC-205#0",
+      "SOP-22#0",
+      "graph:SOP-22",
+      "graph:users.csv"
+     ],
+     "sources": [
+      {
+       "chunk_id": "SOP-03#0",
+       "doc_id": "SOP-03"
+      },
+      {
+       "chunk_id": "SOP-22#0",
+       "doc_id": "SOP-22"
+      },
+      {
+       "chunk_id": "SOP-01#0",
+       "doc_id": "SOP-01"
+      },
+      {
+       "chunk_id": "SOP-17#0",
+       "doc_id": "SOP-17"
+      },
+      {
+       "chunk_id": "SOP-04#0",
+       "doc_id": "SOP-04"
+      },
+      {
+       "chunk_id": "SOP-05#0",
+       "doc_id": "SOP-05"
+      },
+      {
+       "chunk_id": "INC-205#0",
+       "doc_id": "INC-205"
+      },
+      {
+       "chunk_id": "SOP-02#0",
+       "doc_id": "SOP-02"
+      }
+     ],
+     "tools_used": [],
+     "guard_results": [
+      {
+       "guard": "input_validation",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "input_pii",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "injection_patterns",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "injection_classifier",
+       "passed": true,
+       "action": "none",
+       "reason": "The user is asking an ordinary business question about which team owns the SOP for incident INC-205 and who the procedure owner is."
+      },
+      {
+       "guard": "output_filter",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "citations",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "groundedness",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "output_pii",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      }
+     ],
+     "latency_ms": 10259,
+     "cache_hit": false,
+     "question": "Which team owns the SOP used to resolve INC-205, and who is its procedure owner?",
+     "correct": true
+    },
+    {
+     "status": 200,
+     "seconds": 6.6397746250004275,
+     "x_cache": "BYPASS",
+     "trace_id": "36bedb22edd231539206e83b6a21940c",
+     "answer": "The remote work policy (POL-004) says personal devices need two things:\n\n- **MDM enrollment:** Personal devices require MDM enrollment, and the Security team must approve it. [POL-004#2]\n- **Encryption:** Encryption (FileVault / BitLocker) is mandatory. [POL-004#2]\n\nThe policy's general rule is company-issued laptops only. Personal devices are the exception, and they need the approval above. [POL-004#2]\n\nTwo other requirements apply to remote work generally:\n\n- **VPN:** Remote workers must use VPN to access internal systems. [POL-004#1]\n- **No PII downloads:** PII can't be downloaded to local machines. Data must stay in ACME-managed systems. [POL-004#2]",
+     "session_id": "dd7e501d-e4ef-473f-b3fb-0f851394f50a",
+     "blocked": false,
+     "warning": false,
+     "rewritten_query": null,
+     "citations": [
+      "POL-004#2",
+      "POL-004#1"
+     ],
+     "sources": [
+      {
+       "chunk_id": "POL-004#1",
+       "doc_id": "POL-004"
+      },
+      {
+       "chunk_id": "POL-004#2",
+       "doc_id": "POL-004"
+      },
+      {
+       "chunk_id": "POL-003#1",
+       "doc_id": "POL-003"
+      },
+      {
+       "chunk_id": "FAQ-04#0",
+       "doc_id": "FAQ-04"
+      },
+      {
+       "chunk_id": "POL-001#1",
+       "doc_id": "POL-001"
+      },
+      {
+       "chunk_id": "SOP-22#1",
+       "doc_id": "SOP-22"
+      },
+      {
+       "chunk_id": "SOP-03#1",
+       "doc_id": "SOP-03"
+      },
+      {
+       "chunk_id": "SOP-17#1",
+       "doc_id": "SOP-17"
+      }
+     ],
+     "tools_used": [],
+     "guard_results": [
+      {
+       "guard": "input_validation",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "input_pii",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "injection_patterns",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "injection_classifier",
+       "passed": true,
+       "action": "none",
+       "reason": "This is an ordinary business question asking what the remote work policy says about personal devices."
+      },
+      {
+       "guard": "output_filter",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "citations",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "groundedness",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "output_pii",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      }
+     ],
+     "latency_ms": 6551,
+     "cache_hit": false,
+     "question": "What does the remote work policy require for personal devices?",
+     "correct": true
+    },
+    {
+     "status": 200,
+     "seconds": 12.580844292009715,
+     "x_cache": "BYPASS",
+     "trace_id": "3b202450e2ad4a013b091b557b9c1674",
+     "answer": "According to SOP-05, the team lead escalation path is Marcus Lee \u2192 Natalia Voss \u2192 VP Engineering [SOP-05#2]. This applies if an incident can't be resolved within 20 minutes [SOP-05#2].\n\nOther documents give slightly different information:\n- FAQ-06 lists the Infrastructure escalation path as Marcus Lee \u2192 VP Engineering \u2192 CTO. It also tells readers to follow SOP-05 for the escalation steps [FAQ-06#0]. This differs from SOP-05's procedure, which has Natalia Voss between Marcus Lee and VP Engineering and doesn't mention the CTO [SOP-05#2].\n- SOP-05's own \"Escalation\" section uses a 30-minute threshold. It lists Marcus Lee as primary and secondary contact (Infrastructure Lead), with the VP of Engineering as the executive contact [SOP-05#3]. The Procedure section uses a 20-minute threshold instead [SOP-05#2].\n\nI can't tell from the context which of these is the authoritative version.",
+     "session_id": "f629b2ce-1ae1-4f81-ad65-29d68ee82df1",
+     "blocked": false,
+     "warning": false,
+     "rewritten_query": null,
+     "citations": [
+      "SOP-05#2",
+      "FAQ-06#0",
+      "SOP-05#3"
+     ],
+     "sources": [
+      {
+       "chunk_id": "SOP-05#2",
+       "doc_id": "SOP-05"
+      },
+      {
+       "chunk_id": "FAQ-06#0",
+       "doc_id": "FAQ-06"
+      },
+      {
+       "chunk_id": "SOP-05#3",
+       "doc_id": "SOP-05"
+      },
+      {
+       "chunk_id": "SOP-03#3",
+       "doc_id": "SOP-03"
+      },
+      {
+       "chunk_id": "SOP-04#3",
+       "doc_id": "SOP-04"
+      },
+      {
+       "chunk_id": "SOP-01#3",
+       "doc_id": "SOP-01"
+      },
+      {
+       "chunk_id": "SOP-02#3",
+       "doc_id": "SOP-02"
+      },
+      {
+       "chunk_id": "SOP-22#3",
+       "doc_id": "SOP-22"
+      }
+     ],
+     "tools_used": [],
+     "guard_results": [
+      {
+       "guard": "input_validation",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "input_pii",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "injection_patterns",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "injection_classifier",
+       "passed": true,
+       "action": "none",
+       "reason": "The user is asking an ordinary business question about the escalation path described in a standard operating procedure."
+      },
+      {
+       "guard": "output_filter",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "citations",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "groundedness",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      },
+      {
+       "guard": "output_pii",
+       "passed": true,
+       "action": "none",
+       "reason": ""
+      }
+     ],
+     "latency_ms": 12490,
+     "cache_hit": false,
+     "question": "What is the team lead escalation path in SOP-05?",
+     "correct": true
+    }
+   ],
+   "all_ok": true,
+   "requests_per_min": 19.07192679804875
+  }
+ },
+ "health_after": {
+  "status": "ok",
+  "checks": {
+   "agent": true,
+   "chroma": true,
+   "neo4j": true
+  },
+  "cache": {
+   "enabled": true,
+   "entries": 6,
+   "hits": 8,
+   "misses": 6
+  }
+ }
+}
