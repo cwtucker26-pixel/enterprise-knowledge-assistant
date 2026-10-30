@@ -86,8 +86,10 @@ question by a Haiku call before retrieval (the first turn makes no extra call).
 Every `/chat` request is one Langfuse trace (`src/observability/tracing.py`): a root `chat` span, the
 LangGraph nodes as child spans, model calls as generations with token usage, `session_id` = the chat session.
 Tags (`blocked`, `warned`, `follow-up`, `tool:<name>`, `error`) and metadata (blocked, warning, rewritten query,
-tools used, flagged guards) are attached after the run, which is when they are known; the full `guard_results`
-and `sources` sit in the root span's metadata. **PII never reaches Langfuse:** the client is created with a
+tools used, flagged guards) are only known after the run, so they are attached then, to the root span and to a final
+`result` event created after every other span. The child spans carry no tags: when the early spans were stamped
+with `['chat']`, the Langfuse UI showed only that tag at trace level, so the platform evidently takes a trace's tags
+from an early/late span rather than merging them. The full `guard_results` and `sources` sit in the root span's metadata. **PII never reaches Langfuse:** the client is created with a
 `mask` hook that recursively masks emails and phone numbers (and secrets) in every input, output and metadata
 value before export, so the raw question never appears even though the graph receives it before `input_guard`
 masks it; `scripts/check_api.py` fetches a trace back and fails if a raw value is present. Errors are recorded

@@ -249,6 +249,7 @@ def langfuse_tests(client, lf):
     expect("metadata carries blocked, warning, rewritten_query, tools_used, guards_flagged",
            all(k in meta for k in ("blocked", "warning", "rewritten_query", "tools_used", "guards_flagged")), str(sorted(meta)))
     expect("guard_results and sources are attached to the root span", "guard_results" in meta and "sources" in meta)
+    check_tag_consistency(obs, "normal trace", expect_tags=["chat"])
 
     print("\n[trace: tool-using question]")
     sid = f"check-lf-tool-{uuid.uuid4().hex[:8]}"
@@ -259,6 +260,7 @@ def langfuse_tests(client, lf):
     root = root_of(obs)
     expect("tool use is tagged tool:sql_query", "tool:sql_query" in (root.get("tags") or []), str(root.get("tags")))
     expect("the tools node appears as a span", "tools" in names(obs))
+    check_tag_consistency(obs, "tool trace", expect_tags=["chat", "tool:sql_query"])
     expect("tools_used metadata lists sql_query", "sql_query" in str(meta_of(root, "tools_used")))
 
     print("\n[trace: blocked injection]")
@@ -270,6 +272,7 @@ def langfuse_tests(client, lf):
     root = root_of(obs)
     expect("blocked request is tagged blocked", "blocked" in (root.get("tags") or []), str(root.get("tags")))
     expect("a blocked request has no retrieve or agent spans", not ({"retrieve", "agent"} & names(obs)), str(sorted(names(obs))))
+    check_tag_consistency(obs, "blocked trace", expect_tags=["chat", "blocked"])
 
     print("\n[trace: PII never reaches Langfuse]")
     sid = f"check-lf-pii-{uuid.uuid4().hex[:8]}"
@@ -308,6 +311,20 @@ def langfuse_tests(client, lf):
     print("\nTrace URLs (open these for screenshots):")
     for label, url in urls.items():
         print(f"  {label:<11} {url}")
+
+
+def check_tag_consistency(obs, label, expect_tags):
+    """Langfuse has no trace-level read API in this version, so check what the platform derives trace tags from:
+    every observation that carries tags carries the FINAL set (no stale partial copy like ['chat'] on early
+    spans), and both the root span and the last-created observation (the "result" event) carry it."""
+    tagged = [o for o in obs if o.get("tags")]
+    sets = {tuple(sorted(o["tags"])) for o in tagged}
+    last = max(obs, key=lambda o: o.get("start_time") or o.get("startTime") or "") if obs else {}
+    print(f"    tagged observations: {len(tagged)} of {len(obs)}; distinct tag sets: {sorted(sets)}; last observation: {last.get('name')}")
+    expect(f"{label}: all tagged observations carry exactly the final tags {expect_tags}", sets == {tuple(sorted(expect_tags))}, str(sets))
+    expect(f"{label}: the root span carries the final tags", sorted(root_of(obs).get("tags") or []) == sorted(expect_tags))
+    expect(f"{label}: the last-created observation is the 'result' event with the final tags",
+           last.get("name") == "result" and sorted(last.get("tags") or []) == sorted(expect_tags), f"{last.get('name')} {last.get('tags')}")
 
 
 def meta_of(root, key):

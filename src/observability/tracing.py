@@ -63,12 +63,22 @@ class ChatTrace:
         self._root = self._stack.enter_context(self.lf.start_as_current_observation(
             name="chat", as_type="span", trace_context={"trace_id": self.trace_id},
             input={"question": self.question, "session_id": self.session_id}))
-        self._stack.enter_context(propagate_attributes(session_id=self.session_id, trace_name="chat", tags=["chat"]))
+        # No tags here: they are only known after the run, and tags stamped on the early child spans would
+        # otherwise be what the trace ends up showing. Tags are attached at the end (see record_result).
+        self._stack.enter_context(propagate_attributes(session_id=self.session_id, trace_name="chat"))
         self.handler = CallbackHandler()
         return self
 
     def __exit__(self, exc_type, exc, tb):
         return self._stack.__exit__(exc_type, exc, tb)
+
+    def _finish(self, tags: list[str], metadata: dict, root_update: dict, event_output: dict) -> None:
+        """Attach the final trace-level tags/metadata. The platform derives a trace's tags from the observations'
+        attributes and an early value was winning, so the tags go on the root span AND on a final "result" event
+        created after every other span; the child spans carry none."""
+        with propagate_attributes(session_id=self.session_id, trace_name="chat", tags=tags, metadata=metadata):
+            self._root.update(**root_update)
+            self.lf.create_event(name="result", output=event_output, metadata=root_update.get("metadata"))
 
     def record_result(self, response) -> None:
         """Called inside the `with` block after the response is built."""
@@ -82,21 +92,21 @@ class ChatTrace:
             tags.append("follow-up")
         tags += [f"tool:{name}" for name in dict.fromkeys(response.tools_used)]
         flagged = [g["guard"] for g in guards if not g["passed"] or g["action"] in ("flagged", "warned")]
-        # Entering propagate_attributes again while the root span is current sets the attributes on the root
-        # span, which is how values only known after the run end up on the trace.
-        with propagate_attributes(session_id=self.session_id, trace_name="chat", tags=tags, metadata={
-            "blocked": _short(response.blocked), "warning": _short(response.warning),
-            "rewritten_query": _short(response.rewritten_query or ""),
-            "tools_used": _short(",".join(response.tools_used)),
-            "guards_flagged": _short(",".join(flagged)),
-        }):
-            self._root.update(
-                output={"answer": response.answer, "citations": response.citations, "blocked": response.blocked,
-                        "warning": response.warning, "rewritten_query": response.rewritten_query,
-                        "tools_used": response.tools_used, "latency_ms": response.latency_ms},
-                metadata={"guard_results": guards, "sources": [s.model_dump() for s in response.sources]})
+        output = {"answer": response.answer, "citations": response.citations, "blocked": response.blocked,
+                  "warning": response.warning, "rewritten_query": response.rewritten_query,
+                  "tools_used": response.tools_used, "latency_ms": response.latency_ms}
+        details = {"guard_results": guards, "sources": [s.model_dump() for s in response.sources]}
+        self._finish(
+            tags,
+            {"blocked": _short(response.blocked), "warning": _short(response.warning),
+             "rewritten_query": _short(response.rewritten_query or ""),
+             "tools_used": _short(",".join(response.tools_used)), "guards_flagged": _short(",".join(flagged))},
+            {"output": output, "metadata": details},
+            {"blocked": response.blocked, "warning": response.warning, "tools_used": response.tools_used},
+        )
 
     def record_error(self, exc: Exception) -> None:
         """Mark the trace as failed. Only the exception type is recorded, never its message."""
-        with propagate_attributes(session_id=self.session_id, trace_name="chat", tags=["chat", "error"]):
-            self._root.update(level="ERROR", status_message=type(exc).__name__)
+        kind = type(exc).__name__
+        self._finish(["chat", "error"], {"error": kind},
+                     {"level": "ERROR", "status_message": kind}, {"error": kind})
