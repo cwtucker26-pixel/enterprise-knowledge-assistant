@@ -31,27 +31,46 @@ in a few sentences and how it fits the overall system. Prefer simple, readable c
 | Observability | Langfuse Cloud |
 | Testing/Eval | Promptfoo (Node), RAGAS, custom safety eval script |
 
-## Fictional enterprise: Halcyon VFX
-A mid-size visual effects studio. Dummy data lives in `data/raw/`. It should be internally
-consistent and include:
-- **PDFs (policies, manuals):** IT security policy, data handling/client confidentiality policy,
-  render farm operations manual, remote work policy, vendor/outsourcing policy (~5-6 files)
-- **Markdown (SOPs, incident reports, KB articles):** render farm outage escalation, license
-  server recovery, asset publish SOP, shot delivery SOP, 3-4 incident reports (~10-12 files)
-- **FAQ:** ~20 Q&A pairs (single markdown or JSON file)
-- **CSVs:** employees, systems, shots, tickets (small: 20-50 rows each)
-- **Graph seed:** entities (people, teams, systems, software, shows) and relationships
-  (`DEPENDS_ON`, `OWNS`, `RELATED_TO`, `ASSIGNED_TO`, `MEMBER_OF`)
+## Dataset: ACME Corp (provided by the course; we do NOT generate data)
+Internal IT-operations knowledge for a mid-size software/payments company. Files live in
+`data/raw/`; `data/raw/raw_data_explanation.md` describes them. Everything is cross-linked by
+system, team, person, and SOP.
+- **PDFs (4):** POL-001 Acceptable Use, POL-002 Data Retention, POL-003 Information Security,
+  POL-004 Remote Work (`pdfs/`)
+- **Markdown (17):** incident reports INC-201..205, SOP-01..05/17/22, and technical manuals for
+  Payment-Service, Auth-DB, UserProfile-API, DataWarehouse, APIGateway (`markdown/`)
+- **FAQ:** `faq/FAQ.md` (12 Q&A pairs)
+- **Structured (`structured/`):** `users.csv` (46 people), `products.csv` (7), `transactions.csv`
+  (200 rows, all via Payment-Service) -> loaded into SQLite for the SQL tool
+- **Metadata map:** `doc_metadata.csv` (filename, doc_type, dept, date, author, system_refs,
+  sop_refs) and `manifest.json` drive metadata filtering and graph building. Names are cased
+  inconsistently there (Auth-Db, Apigateway) -> normalise to Auth-DB, APIGateway, etc.
+- **Graph:** no seed file; extract from documents + `doc_metadata.csv` + `users.csv`.
+  - Entities: Person, Team, System, SOP, Policy, Incident
+  - Relationships: `DEPENDS_ON` (System->System), `OWNS` (Team->System/Product),
+    `MANAGES` (Person->Team), `MEMBER_OF` (Person->Team, from users.csv),
+    `RESOLVED_BY` (Incident->SOP), `RELATED_TO` (anything else, e.g. Incident->System)
 
-Deliberately include:
-- Facts split across documents so multi-hop questions need the graph
-  (e.g. "Who do I contact if the system Nuke depends on goes down?")
-- Some fake PII (emails, phone numbers) in a few docs to exercise PII masking
-- A few near-duplicate/conflicting passages to exercise re-ranking
+Source-of-truth rules and deliberate test material:
+- **Manuals are the source of truth for `DEPENDS_ON`.** Incident reports sometimes invert the
+  direction (INC-204: "Auth-DB depends on Payment-Service"; INC-205: "Auth-DB depends on
+  APIGateway"), `manual_auth_db.md` says Auth-DB depends on itself, and the FAQ omits DataWarehouse
+  from Auth-DB's dependents. Keep these conflicts: they test re-ranking and hallucination checks.
+  Never "fix" the raw files.
+- Notification-Service and ReportingPortal have no manual (owner is known only from incidents);
+  InventoryEngine appears in POL-001 and a manual but has no owner.
+- The incident/SOP/manual files are template-generated near-duplicates (re-ranking test).
+- FAQ says Marcus Lee escalates to VP Engineering -> CTO, SOP-05 says Marcus Lee -> Natalia Voss
+  -> VP Engineering (conflict). FAQ also says the router uses gpt-4o-mini/gpt-4o; our stack is
+  Claude Haiku/Sonnet, so treat that FAQ answer as dataset text, not as our design.
+- **PII:** the only fake PII is the 46 `@acme.internal` emails (plus names) in `users.csv`.
+  There are no phone numbers or SSNs; the PII-masking tests must use emails and names, and
+  any phone-number/SSN test cases will be written by us as adversarial inputs.
+- Test questions with expected answers: `eval/test_questions.md`.
 
 ## Project structure
 ```
-data/raw/{pdfs,markdown,faq,structured,graph}/  data/processed/
+data/raw/{pdfs,markdown,faq,structured}/  data/raw/doc_metadata.csv  data/processed/
 src/config.py
 src/ingestion/      loaders, cleaning, chunking, metadata
 src/retrieval/      vector.py, graph.py, hybrid.py, rerank.py
@@ -60,7 +79,7 @@ src/guardrails/     input.py, output.py
 src/api/main.py
 src/observability/
 eval/{promptfoo,ragas,safety}/
-scripts/            generate_data.py, build_index.py, build_graph.py, ask.py
+scripts/            build_index.py, build_graph.py, ask.py
 docs/               architecture.md, screenshots/
 ```
 
