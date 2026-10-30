@@ -26,6 +26,8 @@ curl -s localhost:8000/chat -H 'content-type: application/json' \
   -d '{"question": "What does it depend on?", "session_id": "<session_id from the first response>"}'
 ```
 
+Every request is traced in Langfuse (keys in `.env`); the response carries an `X-Trace-Id` header to find it.
+
 Startup loads the embedding model, the re-ranker and the guard models once (about 10 to 20 seconds).
 
 **Limitations:** sessions are held in memory, so they are lost on restart, never expire, and are not shared

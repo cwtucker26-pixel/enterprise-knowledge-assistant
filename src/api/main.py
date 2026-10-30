@@ -11,13 +11,15 @@ import uuid
 from collections import defaultdict
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 from langgraph.checkpoint.memory import MemorySaver
 
 from src.agent.graph import build_agent_graph, final_answer, run_agent, turn_messages
 from src.api.schemas import ChatRequest, ChatResponse, GuardResult, SourceRef
+from src.config import load_settings
 from src.guardrails.output import extract_citations, redact_secrets
+from src.observability.tracing import ChatTrace, init_langfuse
 from src.retrieval.hybrid import HybridRetriever
 
 logger = logging.getLogger("acme.api")
@@ -46,7 +48,10 @@ async def lifespan(app: FastAPI):
     app.state.agent = build_agent_graph(retriever=retriever, checkpointer=app.state.checkpointer)
     app.state.session_locks = defaultdict(threading.Lock)
     app.state.locks_guard = threading.Lock()
+    app.state.langfuse = init_langfuse(load_settings())
     yield
+    app.state.langfuse.flush()  # send any buffered traces before the process exits
+    app.state.langfuse.shutdown()
     retriever.close()
 
 
@@ -83,24 +88,28 @@ def build_response(state: dict, session_id: str, latency_ms: int) -> ChatRespons
 
 
 @app.post("/chat", response_model=ChatResponse)
-def chat(req: ChatRequest, request: Request) -> ChatResponse:
+def chat(req: ChatRequest, request: Request, response: Response) -> ChatResponse:
     app_state = request.app.state
     session_id = req.session_id or str(uuid.uuid4())
     config = {"configurable": {"thread_id": session_id}}
     with session_lock(request.app, session_id):
-        started = time.monotonic()
-        try:
-            state = run_agent(app_state.agent, req.question, config)
-        except Exception:
-            # A turn that died half-way can leave a tool request without its result in the saved history,
-            # which would make every later request in this session fail. Drop the session instead.
+        with ChatTrace(app_state.langfuse, session_id, req.question) as trace:  # one Langfuse trace per request
+            started = time.monotonic()
             try:
-                app_state.checkpointer.delete_thread(session_id)
-            except Exception:
-                logger.exception("could not reset session after an error")
-            raise
-        latency_ms = int((time.monotonic() - started) * 1000)
-    return build_response(state, session_id, latency_ms)
+                state = run_agent(app_state.agent, req.question, {**config, "callbacks": [trace.handler]})
+            except Exception as exc:
+                trace.record_error(exc)
+                # A turn that died half-way can leave a tool request without its result in the saved history,
+                # which would make every later request in this session fail. Drop the session instead.
+                try:
+                    app_state.checkpointer.delete_thread(session_id)
+                except Exception:
+                    logger.exception("could not reset session after an error")
+                raise
+            result = build_response(state, session_id, int((time.monotonic() - started) * 1000))
+            trace.record_result(result)
+    response.headers["X-Trace-Id"] = trace.trace_id  # lets callers (and the checks) find the trace in Langfuse
+    return result
 
 
 @app.get("/health")

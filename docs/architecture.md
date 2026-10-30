@@ -73,3 +73,26 @@ Known limits: input masking means a user cannot look an employee up by email add
 replaced by `[EMAIL]` before anything sees it); names are deliberately not masked because the assistant
 must say who owns what; the injection patterns and classifier are heuristics, not guarantees (Task 11
 measures the failure rate against `eval/safety/adversarial_prompts.json`).
+
+## API and observability
+
+`src/api/main.py` builds the retriever, guard models and compiled agent once (FastAPI lifespan) and serves
+`POST /chat` and `GET /health`. Sessions are the LangGraph checkpointer's `thread_id` (`MemorySaver`: in
+memory, lost on restart, never expired, single worker only). Because saved state outlives a turn, per-turn
+fields are reset by `input_guard`, a blocked input is stored as a placeholder (the attack text never enters
+later turns' history), the agent only sees the last 4 turns, and follow-ups are rewritten into a standalone
+question by a Haiku call before retrieval (the first turn makes no extra call).
+
+Every `/chat` request is one Langfuse trace (`src/observability/tracing.py`): a root `chat` span, the
+LangGraph nodes as child spans, model calls as generations with token usage, `session_id` = the chat session.
+Tags (`blocked`, `warned`, `follow-up`, `tool:<name>`, `error`) and metadata (blocked, warning, rewritten query,
+tools used, flagged guards) are attached after the run, which is when they are known; the full `guard_results`
+and `sources` sit in the root span's metadata. **PII never reaches Langfuse:** the client is created with a
+`mask` hook that recursively masks emails and phone numbers (and secrets) in every input, output and metadata
+value before export, so the raw question never appears even though the graph receives it before `input_guard`
+masks it; `scripts/check_api.py` fetches a trace back and fails if a raw value is present. Errors are recorded
+on the root span (level ERROR, exception *type* only), and traces are flushed at shutdown.
+
+Limits: Langfuse export is asynchronous (a trace can appear seconds to a minute after the request), tracing
+failures never fail a request, and Langfuse SDK 5 can no longer read whole traces, so checks read them back
+through the observations API.
